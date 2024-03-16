@@ -1,2 +1,5 @@
 client/node_modules/
 client/.expo/
+
+server/node_modules/
+server/config.js
