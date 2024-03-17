@@ -91,7 +91,11 @@ export default function ({ loginhandler }) {
                                 }}
                             >{item.name}</Text>
                         </View>
-                        <Text>6</Text>
+                        {item?.unseenCount?(
+                        <View style={styles.unseenContainer}>
+                            <Text style={styles.unseenCount}>{item.unseenCount}</Text>
+                        </View>
+                        ):''}
                     </TouchableOpacity>
                 ))}
 
@@ -122,6 +126,16 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         justifyContent: 'space-between',
         paddingVertical: 8,
+    },
+    unseenContainer: {
+        backgroundColor: "#3f5",
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        justifyContent: 'center'
+    },
+    unseenCount: {
+        textAlign: 'center',
     },
     modalContainer: {
         flex: 1,
