@@ -1,30 +1,36 @@
 import { Text, ScrollView, TouchableOpacity, View, SafeAreaView, Pressable, Image, StyleSheet, Modal, Dimensions } from "react-native"
 import { useRouter, Stack } from "expo-router"
 import { useEffect, useState } from "react"
+
 import api from "../../common/api"
 import { androidRipple } from "../../common/styles"
 import { logout } from "../../common/auth"
+import { storeInLocal } from "../../common/localstorage"
+import ImageModal from "../modals/image-modal"
 
 export default function ({ loginhandler }) {
     let router = useRouter()
 
     var [groupList, setGroupList] = useState([])
     const [modalVisible, setModalVisible] = useState(false);
-    const [ modalData, setModalData ] = useState({
+    const [modalData, setModalData] = useState({
         imageName: "",
         imageUrl: "",
     })
 
-    function navigateTo(path) {
-        router.push(path)
+    function navigateTo(path, query) {
+        router.push({
+            pathname: path,
+            params: query
+        })
     }
 
     async function getGroupList() {
         try {
-            let res = await api.get("/group")
+            let res = await api.get("/group/list")
             if (res.data.success) {
+                storeInLocal('group-list', res.data.groupList)
                 groupList = res.data.groupList
-                console.log('groupList', groupList[0])
                 setGroupList(groupList)
             }
         } catch (err) {
@@ -37,7 +43,7 @@ export default function ({ loginhandler }) {
         await loginhandler()
     }
 
-    const setupModal = (data)=>{
+    const setupModal = (data) => {
         setModalData({ imageTitle: data.name, imageUrl: data.imageUrl })
         setModalVisible(true)
     }
@@ -68,11 +74,11 @@ export default function ({ loginhandler }) {
                 {groupList.map(item => (
                     <TouchableOpacity key={item._id}
                         style={styles.groupItem}
-                        onPress={() => { navigateTo("/chat") }}
+                        onPress={() => { navigateTo("/chat", { groupId: item._id }) }}
                     >
-                        <View style={{ flexDirection: 'row', alignItems: 'center'}}>
-                            
-                            <TouchableOpacity onPress={()=>{ setupModal(item) }} >
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+
+                            <TouchableOpacity onPress={() => { setupModal(item) }} >
                                 <Image
                                     source={{ uri: `http://192.168.105.212:3081/images/${item.imageUrl}` }}
                                     style={styles.image}
@@ -89,31 +95,12 @@ export default function ({ loginhandler }) {
                     </TouchableOpacity>
                 ))}
 
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={closeModal}
-                >
-
-                    <View style={styles.modalContainer}>
-                        <View style={styles.modalContent}>
-                            <View style={styles.modalTitle} >
-                                <Text>{modalData.imageTitle}</Text>
-                                <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
-                                    <Text style={{textAlign: 'center', marginTop: 2 }}>X</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View>
-                                <Image
-                                    source={{ uri: `http://192.168.105.212:3081/images/${modalData.imageUrl}` }}
-                                    style={styles.modalImage}
-                                />
-                            </View>
-                        </View>
-                    </View>
-
-                </Modal>
+                <ImageModal
+                    title={modalData.imageName}
+                    imageUrl={modalData.imageUrl}
+                    modalVisible={modalVisible}
+                    closeModal={closeModal}
+                />
             </SafeAreaView>
         </ScrollView>
     )
@@ -143,7 +130,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
     },
     modalContent: {
-        width: Dimensions.get('window').width-30,
+        width: Dimensions.get('window').width - 30,
         // height: Dimensions.get('window').height-30,
         backgroundColor: '#fff',
         padding: 20,
