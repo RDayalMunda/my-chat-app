@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
+
+
 import Login from "../login/login";
 import Group from "../group/group";
-import { useEffect, useState } from "react";
 import { getSession } from "../../common/auth";
 import Loading from "../loading/loading";
+import { getUserData } from "../../common/localstorage";
 export default function(){
 
 
@@ -11,6 +14,15 @@ export default function(){
 
     function loginhandler(sessionToken){
         setSession(sessionToken)
+        if (sessionToken){
+            getUserData().then( userData=> {
+                global.socket = global.reconnectSocket( { userId: userData._id } )
+            } ).catch( err=>{
+                console.log(err)
+            } )
+        }else{
+            global.socket.disconnect()
+        }
     }
 
     useEffect( ()=>{

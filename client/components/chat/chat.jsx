@@ -1,5 +1,5 @@
 import { Stack, useLocalSearchParams } from "expo-router"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Text, Image, View, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Pressable, Dimensions } from "react-native"
 import api from "../../common/api"
 import { getFromLocal, getGroupById, getMessagesByGroupId, getUserData, storeInLocal } from "../../common/localstorage"
@@ -11,6 +11,7 @@ export default function () {
 
     let [userData, setUserData] = useState({})
 
+    let scrollViewRef = useRef()
     let [messageList, setMessageList] = useState([])
     let [groupData, setGroupData] = useState({
         name: "no-name"
@@ -77,8 +78,9 @@ export default function () {
 
             let messages = await getMessagesByGroupId(params.groupId)
             if (messages?.length) {
-                console.log('local messages')
                 setMessageList(messages)
+                console.log('local messages scroll ')
+                scrollViewRef.current.scrollToEnd({ animated: false });
             } else {
                 console.log('online messages')
                 getOnlineMessage()
@@ -86,6 +88,12 @@ export default function () {
             getGroupData()
         })()
     }, [])
+    useEffect(() => {
+        // Scroll to the bottom when content changes
+        if (scrollViewRef.current) {
+            scrollViewRef.current.scrollToEnd({ animated: false });
+        }
+    }, [messageList]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -106,12 +114,19 @@ export default function () {
 
             {messageList?.length ? (
 
-                <ScrollView contentContainerStyle={styles.scrollArea}>
+                <ScrollView
+                    contentContainerStyle={styles.scrollArea}
+                    ref={scrollViewRef}
+                    onContentSizeChange={() => scrollViewRef.current.scrollToEnd({ animated: false })}
+                >
                     {messageList.map((item) => (
                         <View key={item._id} style={[styles.messageContainer, (item.userId == userData._id) ? styles.messageContainerSender : styles.messageContainerReceiver]}>
                             {(item.userId != userData._id) ? (<View style={[styles.messageTail, styles.receiverTail]} />) : ''}
                             <View style={[styles.messageContent, (item.userId == userData._id) ? styles.senderMessage : styles.receiverMessage]}>
-                                <Text style={styles.messageTitle}>{item.userName}</Text>
+                                {!groupData?.isDirect ? (
+                                    <Text style={styles.messageTitle}>{item.userName}</Text>
+                                ) : ""}
+
                                 <Text style={styles.messageText}>{item.text}</Text>
                             </View>
                             {(item.userId == userData._id) ? (<View style={[styles.messageTail, styles.senderTail]} />) : ''}
