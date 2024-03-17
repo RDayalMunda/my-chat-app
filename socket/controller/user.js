@@ -1,8 +1,14 @@
+const onlineUserDao = require("../dao/online-user")
+
 module.exports = function userController(socket){
-    socket.on("logged-in", (data)=>{
-        console.log('logged-in', socket.id, data)
-    })
-    socket.on("logged-out", (data)=>{
-        console.log('logged-out', socket.id,data)
+    
+    console.log('USER connected', socket.id, socket.handshake.query)
+    if (socket?.handshake?.query?.userId){
+        onlineUserDao.addSocket( socket.handshake.query.userId, socket.id )
+    }
+
+    socket.on("disconnect", ()=>{
+        console.log('user disconnected', socket.id)
+        onlineUserDao.removeSocket( socket.handshake.query.userId, socket.id )
     })
 }

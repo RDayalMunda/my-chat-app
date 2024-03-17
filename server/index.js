@@ -4,6 +4,7 @@ const CONFIG = require("./config.js")
 const mongoose = require("mongoose")
 const cors = require('cors')
 
+require("./controller/socket.js")
 
 app.use(cors())
 app.use(express.json())

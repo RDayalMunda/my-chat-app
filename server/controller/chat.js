@@ -1,6 +1,6 @@
 const chatDao = require("../dao/chat")
 const { STATUS_CODE } = require("../helper/constants")
-
+const socket = require("./socket.js")
 
 module.exports.sendMessage = async function(req, res){
     try{
@@ -10,6 +10,8 @@ module.exports.sendMessage = async function(req, res){
             userId: req.body.userId,
         }
         let message = await chatDao.addMessage(messageObj)
+        message = JSON.parse( JSON.stringify(message) )
+        socket.emit("send-message", message)
         console.log('to send message via socket')
         res.status(STATUS_CODE.OK).json({ success: true })
     }catch(err){
