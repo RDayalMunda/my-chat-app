@@ -1,15 +1,5 @@
 module.exports = [
     {
-        "_id": "65f65f79d2b94e847543c44e",
-        "name": "Foursome",
-        "lastMessage": "aba kya plan hai",
-        "lastMessageTime": "2024-03-17T03:11:53.138Z",
-        "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c41d", "65f65f79d2b94e847543c422", "65f65f79d2b94e847543c426"  ],
-        "unseenCount": 0,
-        "imageUrl": "9d65fc53351e9bfcbd264211a8c5c141.jpeg",
-        "isDirect": false,
-    },
-    {
         "_id": "65f65f79d2b94e847543c41c",
         "name": "Archana",
         "lastMessage": "Kaha hai",
@@ -48,6 +38,16 @@ module.exports = [
         "unseenCount": 0,
         "isDirect": true,
         "imageUrl": "FDjdqPx7b08-Lq2gCrgXvPE.jpg",
+    },
+    {
+        "_id": "65f65f79d2b94e847543c44e",
+        "name": "Foursome",
+        "lastMessage": "aba kya plan hai",
+        "lastMessageTime": "2024-03-17T03:11:53.138Z",
+        "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c41d", "65f65f79d2b94e847543c422", "65f65f79d2b94e847543c426"  ],
+        "unseenCount": 0,
+        "imageUrl": "9d65fc53351e9bfcbd264211a8c5c141.jpeg",
+        "isDirect": false,
     },
     {
         "_id": "65f65f79d2b94e847543c420",
