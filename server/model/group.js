@@ -3,6 +3,7 @@ const ObjectId = mongoose.Types.ObjectId
 const collectionSchema = mongoose.Schema([
     {
         name: String,
+        lastMessageSender: ObjectId,
         lastMessage: String,
         lastModifiedTime: Date,
         participants: [ ObjectId ],

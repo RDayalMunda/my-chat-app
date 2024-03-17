@@ -13,7 +13,7 @@ export default () => {
         console.log('Signing in with:', username, password);
         try{
             let payload = { username, password }
-            let { data } = await api.post("login", payload )
+            let { data } = await api.post("auth/login", payload )
             console.log('data', data)
         }catch(err){
             console.log(err)
