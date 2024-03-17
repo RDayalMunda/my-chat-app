@@ -87,6 +87,7 @@ export default function () {
 
             global.socket.on( "send-message", (messageData)=>{
                 setMessageList(messageList => [...messageList, messageData])
+                storeInLocal(params.groupId, messageList)
             } )
         })()
     }, [])
