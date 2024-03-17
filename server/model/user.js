@@ -5,6 +5,7 @@ const collectionSchema = mongoose.Schema([
         name: String,
         username: String,
         password: String,
+        imageUrl: String,
     }
 ])
 
