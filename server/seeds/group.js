@@ -5,7 +5,8 @@ module.exports = [
         "lastMessage": "Kaha hai",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c41c"  ],
-        "unseenCount": 4
+        "unseenCount": 4,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c41d",
@@ -13,7 +14,8 @@ module.exports = [
         "lastMessage": "aba kya plan hai",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c41d"  ],
-        "unseenCount": 2
+        "unseenCount": 2,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c41e",
@@ -21,7 +23,8 @@ module.exports = [
         "lastMessage": "bhool mat jana",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c41e"  ],
-        "unseenCount": 1
+        "unseenCount": 1,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c41f",
@@ -29,7 +32,8 @@ module.exports = [
         "lastMessage": "pakka na!",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c41f"  ],
-        "unseenCount": 0
+        "unseenCount": 0,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c420",
@@ -37,7 +41,8 @@ module.exports = [
         "lastMessage": "Dekhte h",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c420"  ],
-        "unseenCount": 1
+        "unseenCount": 1,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c421",
@@ -45,7 +50,8 @@ module.exports = [
         "lastMessage": "ao game me hi hai",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c421"  ],
-        "unseenCount": 0
+        "unseenCount": 0,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c422",
@@ -53,7 +59,17 @@ module.exports = [
         "lastMessage": "4v4 me hara diye re",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c422"  ],
-        "unseenCount": 0
+        "unseenCount": 0,
+        "isDirect": true,
+    },
+    {
+        "_id": "65f65f79d2b94e847543c44e",
+        "name": "Foursome",
+        "lastMessage": "aba kya plan hai",
+        "lastMessageTime": "2024-03-17T03:11:53.138Z",
+        "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c41d", "65f65f79d2b94e847543c422", "65f65f79d2b94e847543c426"  ],
+        "unseenCount": 0,
+        "isDirect": false,
     },
     {
         "_id": "65f65f79d2b94e847543c423",
@@ -61,7 +77,8 @@ module.exports = [
         "lastMessage": "tk",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c423"  ],
-        "unseenCount": 1
+        "unseenCount": 1,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c424",
@@ -69,7 +86,8 @@ module.exports = [
         "lastMessage": "aaj ana yaad se",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c424"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c425",
@@ -77,7 +95,8 @@ module.exports = [
         "lastMessage": "ye yaad rakhan",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c425"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c426",
@@ -85,7 +104,8 @@ module.exports = [
         "lastMessage": "cholo na yaad h",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c426"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c427",
@@ -93,7 +113,8 @@ module.exports = [
         "lastMessage": "lobby me hu",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c427"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c428",
@@ -101,7 +122,8 @@ module.exports = [
         "lastMessage": "us event ka use case batana",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c428"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c429",
@@ -109,7 +131,8 @@ module.exports = [
         "lastMessage": "warna kya",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c429"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c42a",
@@ -117,7 +140,8 @@ module.exports = [
         "lastMessage": "Email mila kya sir",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c42a"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c42b",
@@ -125,7 +149,8 @@ module.exports = [
         "lastMessage": "good morning",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c42b"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c42c",
@@ -133,7 +158,8 @@ module.exports = [
         "lastMessage": "ek baat batao",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c42c"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c42d",
@@ -141,7 +167,8 @@ module.exports = [
         "lastMessage": "chal chal dekh lena",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c42d"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c42e",
@@ -149,7 +176,8 @@ module.exports = [
         "lastMessage": "thekua is lob",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c42e"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c42f",
@@ -157,7 +185,8 @@ module.exports = [
         "lastMessage": "please yaar, aana",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c42f"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c430",
@@ -165,7 +194,8 @@ module.exports = [
         "lastMessage": "uske baad kya hua",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c430"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c431",
@@ -173,7 +203,8 @@ module.exports = [
         "lastMessage": "Abi kaha h bata",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c431"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c432",
@@ -181,7 +212,8 @@ module.exports = [
         "lastMessage": "?",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c432"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c433",
@@ -189,7 +221,8 @@ module.exports = [
         "lastMessage": "puch ke bataiye",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c433"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
     {
         "_id": "65f65f79d2b94e847543c434",
@@ -197,6 +230,7 @@ module.exports = [
         "lastMessage": "bana liya? photo bhejo",
         "lastMessageTime": "2024-03-17T03:11:53.138Z",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c434"  ],
-        "unseenCount": 3
+        "unseenCount": 3,
+        "isDirect": true,
     },
 ]

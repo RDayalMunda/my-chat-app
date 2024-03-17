@@ -31,6 +31,7 @@ mongoose.connect(MDB.URL).then(async (err) => {
                 console.log(`+${i + 1} doc in ${seed.name}`)
             }
         }
+        mongoose.disconnect()
 
     } catch (err) {
         console.log(err)
