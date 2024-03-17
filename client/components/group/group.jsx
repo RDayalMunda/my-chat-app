@@ -1,9 +1,11 @@
-import { Text, ScrollView, TouchableOpacity, View, SafeAreaView} from "react-native"
+import { Text, ScrollView, TouchableOpacity, View, SafeAreaView, Pressable} from "react-native"
 import { useRouter, Stack } from "expo-router"
 import { useEffect, useState } from "react"
 import api from "../../common/api"
+import { androidRipple } from "../../common/styles"
+import { logout } from "../../common/auth"
 
-export default function(){
+export default function({ loginhandler }){
     let router = useRouter()
 
     var [ groupList, setGroupList ] = useState([])
@@ -23,6 +25,11 @@ export default function(){
         }
     }
 
+    async function toLogout(){
+        await logout()
+        await loginhandler()
+    }
+
     useEffect( ()=>{
         getGroupList()
     }, [] )
@@ -31,7 +38,14 @@ export default function(){
         <ScrollView>
             <Stack.Screen
                 options={{
-                    title: "My Chat App"
+                    title: "My Chat App",
+                    headerRight: ()=>(
+                        <Pressable android_ripple={androidRipple.dark}
+                        onPress={toLogout}
+                        >
+                            <Text>Logout</Text>
+                        </Pressable>
+                    )
                 }}
             />
             <SafeAreaView>

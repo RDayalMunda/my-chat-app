@@ -1,20 +1,24 @@
 import React, { useState } from 'react';
+import {Stack}  from "expo-router"
+import AsyncStorage from "@react-native-async-storage/async-storage"
+
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Pressable, Image } from 'react-native';
 import { androidRipple } from '../../common/styles';
-import {Stack}  from "expo-router"
 import api from '../../common/api';
 
-export default () => {
+export default ( { loginhandler } ) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSignIn = async () => {
         // Implement sign-in logic here
-        console.log('Signing in with:', username, password);
         try{
             let payload = { username, password }
             let { data } = await api.post("auth/login", payload )
-            console.log('data', data)
+            if(data.success){
+                await AsyncStorage.setItem('sessionToken', JSON.stringify(data.session) )
+                loginhandler(JSON.stringify(data.session))
+            }
         }catch(err){
             console.log(err)
         }
