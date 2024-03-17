@@ -1,5 +1,9 @@
-import Group from "../components/group/group";
+import Home from "../components/home/home"
+
+
 
 export default function (){
-    return ( <Group /> )
+    return (
+        <Home />
+    )
 }
