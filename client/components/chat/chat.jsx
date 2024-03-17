@@ -56,7 +56,7 @@ export default function () {
                 userId: userData._id,
             }
             let { data } = await api.post("/chat/message", payload)
-            console.log(data)
+            setMessageObj( { ...messageObj, text: "" } )
         } catch (err) {
             console.log(err)
         }
@@ -79,13 +79,15 @@ export default function () {
             let messages = await getMessagesByGroupId(params.groupId)
             if (messages?.length) {
                 setMessageList(messages)
-                console.log('local messages scroll ')
                 scrollViewRef.current.scrollToEnd({ animated: false });
             } else {
-                console.log('online messages')
                 getOnlineMessage()
             }
             getGroupData()
+
+            global.socket.on( "send-message", (messageData)=>{
+                setMessageList(messageList => [...messageList, messageData])
+            } )
         })()
     }, [])
     useEffect(() => {
@@ -94,6 +96,7 @@ export default function () {
             scrollViewRef.current.scrollToEnd({ animated: false });
         }
     }, [messageList]);
+
 
     return (
         <SafeAreaView style={styles.container}>
