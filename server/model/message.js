@@ -2,12 +2,11 @@ const mongoose = require("mongoose")
 const ObjectId = mongoose.Types.ObjectId
 const collectionSchema = mongoose.Schema([
     {
-        name: String,
-        userName: String,
-        password: String,
-        imageUrl: String,
+        text: String,
+        userId: ObjectId,
+        groupId: ObjectId,
     }
 ], { timestamps: true })
 
-const name = "User"
+const name = "Message"
 module.exports = { collectionSchema, name }

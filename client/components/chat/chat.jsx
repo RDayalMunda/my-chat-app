@@ -2,7 +2,7 @@ import { Stack, useLocalSearchParams } from "expo-router"
 import { useEffect, useState } from "react"
 import { Text, Image, View, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Pressable, Dimensions } from "react-native"
 import api from "../../common/api"
-import { getFromLocal, getGroupById, getMessagesByGroupId, getUserData } from "../../common/localstorage"
+import { getFromLocal, getGroupById, getMessagesByGroupId, getUserData, storeInLocal } from "../../common/localstorage"
 import ImageModal from "../modals/image-modal"
 
 
@@ -18,6 +18,7 @@ export default function () {
 
     let [messageObj, setMessageObj] = useState({
         text: "",
+        groupId: params.groupId,
     })
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -36,6 +37,16 @@ export default function () {
     const closeModal = () => {
         setModalVisible(false);
     };
+
+    async function getOnlineMessage() {
+        try {
+            let { data } = await api.get("/chat/messages", { params: { groupId: params.groupId } })
+            storeInLocal(params.groupId, data.messages)
+            setMessageList(data.messages)
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     async function sendMessage() {
         try {
@@ -65,27 +76,12 @@ export default function () {
             setModalData({ imageName: groupData.name, imageUrl: groupData.imageUrl })
 
             let messages = await getMessagesByGroupId(params.groupId)
-            if (messages) {
+            if (messages?.length) {
                 console.log('local messages')
+                setMessageList(messages)
             } else {
-                setMessageList([
-                    {
-                        _id: "asdgbwrsfbjdgjadgs",
-                        groupId: params.groupId,
-                        text: "Accha yaad se batao kab game me aayega? bhool mat jana",
-                        userId: groupData._id,
-                        userName: groupData.name,
-                        createdAt: new Date(),
-                    },
-                    {
-                        _id: "46ywteagrfawrfvas",
-                        groupId: params.groupId,
-                        text: "Nice bro!",
-                        userId: "65f65f79d2b94e847543c44e",
-                        userName: "Ram",
-                        createdAt: new Date(),
-                    }
-                ])
+                console.log('online messages')
+                getOnlineMessage()
             }
             getGroupData()
         })()
@@ -110,8 +106,8 @@ export default function () {
 
             {messageList?.length ? (
 
-                <ScrollView style={styles.scrollArea}>
-                    {messageList.map((item, index) => (
+                <ScrollView contentContainerStyle={styles.scrollArea}>
+                    {messageList.map((item) => (
                         <View key={item._id} style={[styles.messageContainer, (item.userId == userData._id) ? styles.messageContainerSender : styles.messageContainerReceiver]}>
                             {(item.userId != userData._id) ? (<View style={[styles.messageTail, styles.receiverTail]} />) : ''}
                             <View style={[styles.messageContent, (item.userId == userData._id) ? styles.senderMessage : styles.receiverMessage]}>
@@ -121,8 +117,9 @@ export default function () {
                             {(item.userId == userData._id) ? (<View style={[styles.messageTail, styles.senderTail]} />) : ''}
                         </View>
                     ))}
-
                 </ScrollView>
+
+
             ) : (
                 <View style={styles.messageContainerEmpty}>
                     <Text style={{ textAlign: 'center' }}>No Messages yet!</Text>
@@ -132,7 +129,7 @@ export default function () {
                 <TextInput
                     style={styles.input}
                     placeholder="Enter text..."
-                    onChangeText={(text)=>{ setMessageObj( { ...messageObj, text: text } ) }}
+                    onChangeText={(text) => { setMessageObj({ ...messageObj, text: text }) }}
                     value={messageObj.text}
                 />
                 <Pressable
@@ -175,7 +172,6 @@ let styles = StyleSheet.create({
     scrollArea: {
         flexGrow: 1,
         paddingBottom: 70, // Adjust this value to leave space for the input area
-        backgroundColor: '#ef7',
         width: Dimensions.get('window').width
     },
     messageContainerEmpty: {
@@ -187,9 +183,10 @@ let styles = StyleSheet.create({
         right: 0,
     },
     item: {
-        padding: 10,
+        padding: 20,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
+        // marginBottom: 0
     },
     messageContainer: {
         flexDirection: 'row',

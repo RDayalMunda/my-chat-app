@@ -8,13 +8,13 @@ import api from '../../common/api';
 import { storeInLocal } from '../../common/localstorage';
 
 export default ( { loginhandler } ) => {
-    const [username, setUsername] = useState('');
+    const [userName, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSignIn = async () => {
         // Implement sign-in logic here
         try{
-            let payload = { username, password }
+            let payload = { userName, password }
             let { data } = await api.post("auth/login", payload )
             if(data.success){
                 storeInLocal( 'sessionToken', data.session )
@@ -46,7 +46,7 @@ export default ( { loginhandler } ) => {
                 style={styles.input}
                 placeholder="Username"
                 onChangeText={setUsername}
-                value={username}
+                value={userName}
                 autoCapitalize="none"
             />
             <TextInput

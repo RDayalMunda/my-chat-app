@@ -118,9 +118,8 @@ const styles = StyleSheet.create({
         resizeMode: 'cover', // Adjust the image resizing mode as needed
     },
     groupItem: {
-        backgroundColor: '#e6e6e6',
         borderBottomWidth: 1,
-        borderBottomColor: '#000',
+        borderBottomColor: '#aaa',
         flexDirection: 'row',
         alignItems: 'center',
         paddingHorizontal: 16,

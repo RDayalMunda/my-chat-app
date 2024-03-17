@@ -5,8 +5,8 @@ const bCrypt = require("bcrypt")
 
 module.exports.login = async function(req, res){
     try{
-        if ( !req.body.username || !req.body.password ) throw "Invalid Credentials"
-        let userData = await userDao.getUserByUsername(req.body.username)
+        if ( !req.body.userName || !req.body.password ) throw "Invalid Credentials"
+        let userData = await userDao.getUserByUsername(req.body.userName)
         if (!userData) throw "No user with this name"
         let isMatch = await bCrypt.compare( req.body.password, userData.password )
         if (!isMatch) throw "Invalid password"
