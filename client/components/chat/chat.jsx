@@ -2,12 +2,14 @@ import { Stack, useLocalSearchParams } from "expo-router"
 import { useEffect, useState } from "react"
 import { Text, Image, View, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Pressable, Dimensions } from "react-native"
 import api from "../../common/api"
-import { getFromLocal, getGroupById } from "../../common/localstorage"
+import { getFromLocal, getGroupById, getMessagesByGroupId, getUserData } from "../../common/localstorage"
 import ImageModal from "../modals/image-modal"
 
 
 export default function () {
     const params = useLocalSearchParams()
+
+    let [userData, setUserData] = useState({})
 
     let [messageList, setMessageList] = useState([])
     let [groupData, setGroupData] = useState({
@@ -19,7 +21,6 @@ export default function () {
         imageName: "",
         imageUrl: "",
     })
-    console.log('params', params)
 
     async function getGroupData() {
         try {
@@ -34,12 +35,42 @@ export default function () {
 
 
     useEffect(() => {
+        getUserData().then(data => {
+            if (data) setUserData(data)
+        }).catch(() => { })
         !(async () => {
-            console.log('loading once in chat')
             let groupData = await getGroupById(params.groupId)
-            setGroupData(groupData)
+            if (groupData) {
+                setGroupData(groupData)
+            } else {
+                console.log('send api')
+            }
             setModalData({ imageName: groupData.name, imageUrl: groupData.imageUrl })
-            console.log('groupData', groupData)
+
+            let messages = await getMessagesByGroupId(params.groupId)
+            if (messages) {
+                console.log('local messages')
+            } else {
+                console.log('online message', userData)
+                setMessageList([
+                    {
+                        _id: "asdgbwrsfbjdgjadgs",
+                        groupId: params.groupId,
+                        text: "Accha yaad se batao kab game me aayega? bhool mat jana",
+                        userId: groupData._id,
+                        userName: groupData.name,
+                        createdAt: new Date(),
+                    },
+                    {
+                        _id: "46ywteagrfawrfvas",
+                        groupId: params.groupId,
+                        text: "Nice bro!",
+                        userId: "65f65f79d2b94e847543c44e",
+                        userName: "Ram",
+                        createdAt: new Date(),
+                    }
+                ])
+            }
             getGroupData()
         })()
     }, [])
@@ -61,20 +92,22 @@ export default function () {
                 }}
             />
 
-            {messageList?.length?(
-                
+            {messageList?.length ? (
+
                 <ScrollView style={styles.scrollArea}>
-                    {(new Array(10)).map((item, index) => (
-                        <View key={index} style={styles.item}>
-                            <Text>heyylo sdfsd sdfs  fsfdf d</Text>
+                    {messageList.map((item, index) => (
+                        <View key={item._id} style={[styles.messageContainer, (item.userId==userData._id)?styles.messageContainerSender:styles.messageContainerReceiver]}>
+                            { (item.userId!=userData._id)?(<View style={[styles.messageTail, styles.receiverTail]} />):''}
+                            <View style={[styles.messageContent, (item.userId==userData._id) ? styles.senderMessage : styles.receiverMessage]}>
+                                <Text style={styles.messageTitle}>{item.userName}</Text>
+                                <Text style={styles.messageText}>{item.text}</Text>
+                            </View>
+                            {(item.userId==userData._id)?(<View style={[styles.messageTail, styles.senderTail]} />):''}
                         </View>
                     ))}
-                    
-                    <View style={styles.item}>
-                            <Text>heyylo sdfsd sdfs  fsfdf d</Text>
-                    </View>
+
                 </ScrollView>
-            ):(
+            ) : (
                 <View style={styles.messageContainerEmpty}>
                     <Text style={{ textAlign: 'center' }}>No Messages yet!</Text>
                 </View>
@@ -133,6 +166,57 @@ let styles = StyleSheet.create({
         padding: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
+    },
+    messageContainer: {
+        flexDirection: 'row',
+        marginVertical: 5,
+    },
+    messageContainerSender: {
+        justifyContent: 'flex-end'
+    },
+    messageContainerReceiver: {
+        justifyContent: 'flex-start'
+    },
+    messageContent: {
+        maxWidth: '80%',
+        padding: 10,
+        borderBottomLeftRadius: 5,
+        borderBottomRightRadius: 5,
+    },
+    senderMessage: {
+        backgroundColor: '#d3d3d3', // Gray background for sender's messages
+        alignSelf: 'flex-end',
+        borderTopLeftRadius: 5,
+    },
+    receiverMessage: {
+        backgroundColor: '#add8e6', // Light blue background for receiver's messages
+        alignSelf: 'flex-start',
+        borderTopRightRadius: 5,
+    },
+    messageTitle: {
+        fontWeight: 'bold',
+        marginBottom: 5,
+    },
+    messageText: {
+        fontSize: 16,
+    },
+    messageTail: {
+        // position: 'absolute',
+        width: 0,
+        height: 0,
+        borderLeftColor: 'transparent',
+        borderBottomColor: 'transparent',
+    },
+    senderTail: {
+        borderLeftColor: '#d3d3d3', // Gray tail for sender's messages
+        marginLeft: 0,
+        borderLeftWidth: 10,
+        borderBottomWidth: 10,
+    },
+    receiverTail: {
+        borderRightColor: '#add8e6', // Light blue tail for receiver's messages
+        borderRightWidth: 10,
+        borderBottomWidth: 10,
     },
     inputContainer: {
         flexDirection: 'row',

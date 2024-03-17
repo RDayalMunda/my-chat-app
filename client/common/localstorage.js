@@ -29,3 +29,21 @@ export const getGroupById = async function(groupId){
         return null
     }
 }
+
+export const getMessagesByGroupId = async function(groupId){
+    try{
+        return JSON.parse( await AsyncStorage.getItem(groupId) )
+    }catch(err){
+        console.log(err)
+        return err
+    }
+}
+
+export const getUserData = async function(){
+    try{
+        return JSON.parse( await AsyncStorage.getItem('user-data') )
+    }catch(err){
+        console.log(err)
+        return err
+    }
+}

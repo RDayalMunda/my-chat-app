@@ -5,6 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Pressable, Image } from 'react-native';
 import { androidRipple } from '../../common/styles';
 import api from '../../common/api';
+import { storeInLocal } from '../../common/localstorage';
 
 export default ( { loginhandler } ) => {
     const [username, setUsername] = useState('');
@@ -16,7 +17,8 @@ export default ( { loginhandler } ) => {
             let payload = { username, password }
             let { data } = await api.post("auth/login", payload )
             if(data.success){
-                await AsyncStorage.setItem('sessionToken', JSON.stringify(data.session) )
+                storeInLocal( 'sessionToken', data.session )
+                storeInLocal( 'user-data', data.session )
                 loginhandler(JSON.stringify(data.session))
             }
         }catch(err){
