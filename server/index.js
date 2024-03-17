@@ -10,6 +10,7 @@ app.use(express.json())
 
 app.use('/auth', require("./router/auth.js"))
 app.use("/group", require("./router/group.js"))
+app.use("/chat", require("./router/chat.js"))
 
 app.listen(CONFIG.PORT, () => {
     console.log(`chat app running on http://localhost:${CONFIG.PORT}`)

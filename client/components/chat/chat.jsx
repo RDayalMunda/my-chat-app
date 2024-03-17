@@ -16,6 +16,10 @@ export default function () {
         name: "no-name"
     })
 
+    let [messageObj, setMessageObj] = useState({
+        text: "",
+    })
+
     const [modalVisible, setModalVisible] = useState(false);
     const [modalData, setModalData] = useState({
         imageName: "",
@@ -32,6 +36,19 @@ export default function () {
     const closeModal = () => {
         setModalVisible(false);
     };
+
+    async function sendMessage() {
+        try {
+            let payload = {
+                ...messageObj,
+                userId: userData._id,
+            }
+            let { data } = await api.post("/chat/message", payload)
+            console.log(data)
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
 
     useEffect(() => {
@@ -51,7 +68,6 @@ export default function () {
             if (messages) {
                 console.log('local messages')
             } else {
-                console.log('online message', userData)
                 setMessageList([
                     {
                         _id: "asdgbwrsfbjdgjadgs",
@@ -96,13 +112,13 @@ export default function () {
 
                 <ScrollView style={styles.scrollArea}>
                     {messageList.map((item, index) => (
-                        <View key={item._id} style={[styles.messageContainer, (item.userId==userData._id)?styles.messageContainerSender:styles.messageContainerReceiver]}>
-                            { (item.userId!=userData._id)?(<View style={[styles.messageTail, styles.receiverTail]} />):''}
-                            <View style={[styles.messageContent, (item.userId==userData._id) ? styles.senderMessage : styles.receiverMessage]}>
+                        <View key={item._id} style={[styles.messageContainer, (item.userId == userData._id) ? styles.messageContainerSender : styles.messageContainerReceiver]}>
+                            {(item.userId != userData._id) ? (<View style={[styles.messageTail, styles.receiverTail]} />) : ''}
+                            <View style={[styles.messageContent, (item.userId == userData._id) ? styles.senderMessage : styles.receiverMessage]}>
                                 <Text style={styles.messageTitle}>{item.userName}</Text>
                                 <Text style={styles.messageText}>{item.text}</Text>
                             </View>
-                            {(item.userId==userData._id)?(<View style={[styles.messageTail, styles.senderTail]} />):''}
+                            {(item.userId == userData._id) ? (<View style={[styles.messageTail, styles.senderTail]} />) : ''}
                         </View>
                     ))}
 
@@ -113,8 +129,16 @@ export default function () {
                 </View>
             )}
             <View style={styles.inputContainer}>
-                <TextInput style={styles.input} placeholder="Enter text..." />
-                <Pressable style={styles.pressable}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter text..."
+                    onChangeText={(text)=>{ setMessageObj( { ...messageObj, text: text } ) }}
+                    value={messageObj.text}
+                />
+                <Pressable
+                    style={styles.pressable}
+                    onPress={sendMessage}
+                >
                     <Text>Send</Text>
                 </Pressable>
             </View>
