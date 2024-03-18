@@ -6,7 +6,8 @@ const collectionSchema = mongoose.Schema([
         participants: [ ObjectId ],
         imageUrl: String,
         
-        isDirect: Boolean, // if true-> it will have 2 participants // if false-> it is a group 
+        isDirect: Boolean, // if true-> it will have 2 participants // if false-> it is a group
+        // if direct is true name should be generated dynamically
 
         
         lastMessageSender: ObjectId,

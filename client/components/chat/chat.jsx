@@ -79,7 +79,7 @@ export default function () {
             let messages = await getMessagesByGroupId(params.groupId)
             if (messages?.length) {
                 setMessageList(messages)
-                scrollViewRef.current.scrollToEnd({ animated: false });
+                scrollViewRef?.current?.scrollToEnd({ animated: false });
             } else {
                 getOnlineMessage()
             }
@@ -94,7 +94,7 @@ export default function () {
     useEffect(() => {
         // Scroll to the bottom when content changes
         if (scrollViewRef.current) {
-            scrollViewRef.current.scrollToEnd({ animated: false });
+            scrollViewRef?.current?.scrollToEnd({ animated: false });
         }
     }, [messageList]);
 
@@ -125,15 +125,15 @@ export default function () {
                 >
                     {messageList.map((item) => (
                         <View key={item._id} style={[styles.messageContainer, (item.userId == userData._id) ? styles.messageContainerSender : styles.messageContainerReceiver]}>
-                            {(item.userId != userData._id) ? (<View style={[styles.messageTail, styles.receiverTail]} />) : ''}
+                            {(item.userId != userData._id) ? (<View style={[styles.messageTail, styles.receiverTail]} />) : <></>}
                             <View style={[styles.messageContent, (item.userId == userData._id) ? styles.senderMessage : styles.receiverMessage]}>
                                 {!groupData?.isDirect ? (
                                     <Text style={styles.messageTitle}>{item.userName}</Text>
-                                ) : ""}
+                                ) : <></>}
 
                                 <Text style={styles.messageText}>{item.text}</Text>
                             </View>
-                            {(item.userId == userData._id) ? (<View style={[styles.messageTail, styles.senderTail]} />) : ''}
+                            {(item.userId == userData._id) ? (<View style={[styles.messageTail, styles.senderTail]} />) : <></>}
                         </View>
                     ))}
                 </ScrollView>

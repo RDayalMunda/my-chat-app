@@ -5,13 +5,14 @@ import { useEffect, useState } from "react"
 import api from "../../common/api"
 import { androidRipple } from "../../common/styles"
 import { logout } from "../../common/auth"
-import { storeInLocal } from "../../common/localstorage"
+import { getUserData, storeInLocal } from "../../common/localstorage"
 import ImageModal from "../modals/image-modal"
 
 export default function ({ loginhandler }) {
     let router = useRouter()
 
     var [groupList, setGroupList] = useState([])
+    var [userData, setUserData] = useState({})
     const [modalVisible, setModalVisible] = useState(false);
     const [modalData, setModalData] = useState({
         imageName: "",
@@ -27,7 +28,7 @@ export default function ({ loginhandler }) {
 
     async function getGroupList() {
         try {
-            let res = await api.get("/group/list")
+            let res = await api.get("/group/list", { headers: { userId: userData._id }});
             if (res.data.success) {
                 storeInLocal('group-list', res.data.groupList)
                 groupList = res.data.groupList
@@ -53,7 +54,11 @@ export default function ({ loginhandler }) {
     };
 
     useEffect(() => {
-        getGroupList()
+        getUserData().then(data=>{
+            userData = data
+            setUserData(oldData=>data)
+            getGroupList()
+        }).catch( (err)=>{ console.log(err) } )
     }, [])
 
     return (
@@ -80,22 +85,33 @@ export default function ({ loginhandler }) {
 
                             <TouchableOpacity onPress={() => { setupModal(item) }} >
                                 <Image
-                                    source={{ uri: `http://192.168.105.212:3081/images/${item.imageUrl}` }}
+                                    source={{ uri: `http://192.168.105.212:3081/images/${!item?.isDirect?item.imageUrl:(
+                                        userData._id==item.participants[0]._id?
+                                        item.participants[1].imageUrl:
+                                        item.participants[0].imageUrl
+                                    )}` }}
                                     style={styles.image}
                                 />
                             </TouchableOpacity>
+                            
                             <Text
                                 style={{
                                     fontSize: 15,
                                     paddingLeft: 15,
                                 }}
-                            >{item.name}</Text>
+                            >{
+                                !item?.isDirect?item.name:(
+                                    userData._id==item.participants[0]._id?
+                                    item.participants[1].name:
+                                    item.participants[0].name
+                                )
+                            }</Text>
                         </View>
                         {item?.unseenCount?(
                         <View style={styles.unseenContainer}>
                             <Text style={styles.unseenCount}>{item.unseenCount}</Text>
                         </View>
-                        ):''}
+                        ):<></>}
                     </TouchableOpacity>
                 ))}
 
