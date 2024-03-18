@@ -7,6 +7,7 @@ import { androidRipple } from "../../common/styles"
 import { logout } from "../../common/auth"
 import { getUserData, storeInLocal } from "../../common/localstorage"
 import ImageModal from "../modals/image-modal"
+import { IMAGE_URL } from "../../config"
 
 export default function ({ loginhandler }) {
     let router = useRouter()
@@ -84,7 +85,7 @@ export default function ({ loginhandler }) {
 
                             <TouchableOpacity onPress={() => { setupModal(item) }} >
                                 <Image
-                                    source={{ uri: `http://192.168.170.212:3081/images/${!item?.isDirect?item.imageUrl:(
+                                    source={{ uri: `${IMAGE_URL}/${!item?.isDirect?item.imageUrl:(
                                         userData._id==item.participants[0]._id?
                                         item.participants[1].imageUrl:
                                         item.participants[0].imageUrl

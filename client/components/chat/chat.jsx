@@ -4,6 +4,7 @@ import { Text, Image, View, StyleSheet, TouchableOpacity, SafeAreaView, ScrollVi
 import api from "../../common/api"
 import { getFromLocal, getGroupById, getMessagesByGroupId, getUserData, storeInLocal } from "../../common/localstorage"
 import ImageModal from "../modals/image-modal"
+import { IMAGE_URL } from "../../config"
 
 
 export default function () {
@@ -117,7 +118,7 @@ export default function () {
                     headerLeft: () => (
                         <TouchableOpacity onPress={() => { setModalVisible(true) }}>
                             <Image
-                                source={{ uri: `http://192.168.170.212:3081/images/${groupData.imageUrl}` }}
+                                source={{ uri: `${IMAGE_URL}/${groupData.imageUrl}` }}
                                 style={styles.headerImage}
                             />
                         </TouchableOpacity>

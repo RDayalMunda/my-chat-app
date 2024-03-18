@@ -4,6 +4,7 @@ import { Modal, Pressable, StyleSheet, Text, View, Animated, Button, TouchableOp
 import { androidRipple } from "../../common/styles";
 import { logout } from "../../common/auth";
 import { getUserData } from "../../common/localstorage";
+import { IMAGE_URL } from "../../config";
 
 export default function ({ loginhandler }) {
     let [visible, setVisible] = useState(false)
@@ -61,7 +62,7 @@ export default function ({ loginhandler }) {
                                 onPress={() => { setVisible(true) }}
                             >
                                 <Image
-                                    source={{ uri: `http://192.168.170.212:3081/images/${userData.imageUrl}` }}
+                                    source={{ uri: `${IMAGE_URL}/${userData.imageUrl}` }}
                                     style={styles.image}
                                 />
                             </Pressable>
@@ -100,7 +101,7 @@ export default function ({ loginhandler }) {
                                         android_ripple={androidRipple.light}
                                     >
                                         <Image
-                                            source={{ uri: `http://192.168.170.212:3081/images/${userData.imageUrl}` }}
+                                            source={{ uri: `${IMAGE_URL}/${userData.imageUrl}` }}
                                             style={[styles.imageProfile ]}
                                         />
                                         <Text style={styles.profileText}>{userData.name}</Text>

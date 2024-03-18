@@ -12,7 +12,6 @@ module.exports.sendMessage = async function(req, res){
         let message = await chatDao.addMessage(messageObj)
         message = JSON.parse( JSON.stringify(message) )
         socket.emit("send-message", message)
-        console.log('to send message via socket')
         res.status(STATUS_CODE.OK).json({ success: true })
     }catch(err){
         console.log(err)
