@@ -61,7 +61,7 @@ export default function ({ loginhandler }) {
                                 onPress={() => { setVisible(true) }}
                             >
                                 <Image
-                                    source={{ uri: `http://192.168.105.212:3081/images/${userData.imageUrl}` }}
+                                    source={{ uri: `http://192.168.170.212:3081/images/${userData.imageUrl}` }}
                                     style={styles.image}
                                 />
                             </Pressable>
@@ -100,7 +100,7 @@ export default function ({ loginhandler }) {
                                         android_ripple={androidRipple.light}
                                     >
                                         <Image
-                                            source={{ uri: `http://192.168.105.212:3081/images/${userData.imageUrl}` }}
+                                            source={{ uri: `http://192.168.170.212:3081/images/${userData.imageUrl}` }}
                                             style={[styles.imageProfile ]}
                                         />
                                         <Text style={styles.profileText}>{userData.name}</Text>

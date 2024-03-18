@@ -24,7 +24,7 @@ export default function ({ title, imageUrl, modalVisible, closeModal }) {
                     {/* Content */}
                     <View style={styles.content}>
                         <Image
-                            source={{ uri: `http://192.168.105.212:3081/images/${imageUrl}` }}
+                            source={{ uri: `http://192.168.170.212:3081/images/${imageUrl}` }}
                             style={styles.image}
                             resizeMode="contain"
                         />

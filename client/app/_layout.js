@@ -9,10 +9,10 @@ export default function () {
 }
 
 
-global.socket = io("http://192.168.105.212:3081")
+global.socket = io("http://192.168.170.212:3081")
 global.reconnectSocket = ( query )=>{
     global.socket.disconnect()
-    global.socket = io("http://192.168.105.212:3081" , { query })
+    global.socket = io("http://192.168.170.212:3081" , { query })
     return global.socket
 }
 global.socket.on('connect', () => {

@@ -117,7 +117,7 @@ export default function () {
                     headerLeft: () => (
                         <TouchableOpacity onPress={() => { setModalVisible(true) }}>
                             <Image
-                                source={{ uri: `http://192.168.105.212:3081/images/${groupData.imageUrl}` }}
+                                source={{ uri: `http://192.168.170.212:3081/images/${groupData.imageUrl}` }}
                                 style={styles.headerImage}
                             />
                         </TouchableOpacity>
