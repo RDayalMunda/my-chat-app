@@ -24,7 +24,7 @@ export default function () {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [modalData, setModalData] = useState({
-        imageName: "",
+        title: "",
         imageUrl: "",
     })
 
@@ -78,12 +78,12 @@ export default function () {
             }
 
             if (!groupData.isDirect){
-                setModalData({ imageName: groupData.name, imageUrl: groupData.imageUrl })
+                setModalData({ title: groupData.name, imageUrl: groupData.imageUrl })
             }else{
                 console.log('userData', userData._id)
                 let user = groupData.participants[0]._id == userData._id?groupData.participants[1]:groupData.participants[0]
                 setGroupData( oldData=>({ ...oldData, name: user.name, imageUrl: user.imageUrl }) )
-                setModalData({ imageTitle: user.name, imageUrl: user.imageUrl })
+                setModalData({ title: user.name, imageUrl: user.imageUrl })
             }
 
             let messages = await getMessagesByGroupId(params.groupId)
@@ -173,7 +173,7 @@ export default function () {
 
 
             <ImageModal
-                title={modalData.imageName}
+                title={modalData.title}
                 imageUrl={modalData.imageUrl}
                 modalVisible={modalVisible}
                 closeModal={closeModal}

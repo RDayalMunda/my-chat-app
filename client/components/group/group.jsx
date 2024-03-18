@@ -1,4 +1,4 @@
-import { Text, ScrollView, TouchableOpacity, View, SafeAreaView, Pressable, Image, StyleSheet, Modal, Dimensions } from "react-native"
+import { Text, ScrollView, TouchableOpacity, View, SafeAreaView, Pressable, Image, StyleSheet, Dimensions } from "react-native"
 import { useRouter, Stack } from "expo-router"
 import { useEffect, useState } from "react"
 
@@ -15,7 +15,7 @@ export default function ({ loginhandler }) {
     var [userData, setUserData] = useState({})
     const [modalVisible, setModalVisible] = useState(false);
     const [modalData, setModalData] = useState({
-        imageName: "",
+        title: "",
         imageUrl: "",
     })
 
@@ -45,11 +45,12 @@ export default function ({ loginhandler }) {
     }
 
     const setupModal = (data) => {
+        console.log('setup modal', data.name, !data.isDirect)
         if (!data.isDirect){
-            setModalData({ imageTitle: data.name, imageUrl: data.imageUrl })
+            setModalData({ title: data.name, imageUrl: data.imageUrl })
         } else {
             let user = data.participants[0]._id == userData._id?data.participants[1]:data.participants[0]
-            setModalData({ imageTitle: user.name, imageUrl: user.imageUrl })
+            setModalData({ title: user.name, imageUrl: user.imageUrl })
         }
         setModalVisible(true)
     }
@@ -72,11 +73,21 @@ export default function ({ loginhandler }) {
                 options={{
                     title: "My Chat App",
                     headerRight: () => (
-                        <Pressable android_ripple={androidRipple.dark}
-                            onPress={toLogout}
-                        >
-                            <Text>Logout</Text>
-                        </Pressable>
+                        <View style={{  flexDirection: 'row', alignItems: 'center' }}>
+                            <TouchableOpacity onPress={() =>{ setupModal(userData) }} >
+                                <Image
+                                    source={{ uri: `http://192.168.105.212:3081/images/${userData.imageUrl}` }}
+                                    style={styles.image}
+                                />
+                            </TouchableOpacity>
+                            
+                            <Pressable android_ripple={androidRipple.dark}
+                                onPress={toLogout}
+                                style={styles.logoutBtn}
+                            >
+                                <Text>Logout</Text>
+                            </Pressable>
+                        </View>
                     )
                 }}
             />
@@ -121,7 +132,7 @@ export default function ({ loginhandler }) {
                 ))}
 
                 <ImageModal
-                    title={modalData.imageName}
+                    title={modalData.title}
                     imageUrl={modalData.imageUrl}
                     modalVisible={modalVisible}
                     closeModal={closeModal}
@@ -189,4 +200,11 @@ const styles = StyleSheet.create({
         height: 24,
         borderRadius: 5,
     },
+    logoutBtn: {
+        borderRadius: 5,
+        overflow: 'hidden',
+        backgroundColor: '#aaa',
+        padding: 5,
+        marginLeft: 5,
+    }
 });
