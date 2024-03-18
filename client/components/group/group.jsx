@@ -45,7 +45,12 @@ export default function ({ loginhandler }) {
     }
 
     const setupModal = (data) => {
-        setModalData({ imageTitle: data.name, imageUrl: data.imageUrl })
+        if (!data.isDirect){
+            setModalData({ imageTitle: data.name, imageUrl: data.imageUrl })
+        } else {
+            let user = data.participants[0]._id == userData._id?data.participants[1]:data.participants[0]
+            setModalData({ imageTitle: user.name, imageUrl: user.imageUrl })
+        }
         setModalVisible(true)
     }
 

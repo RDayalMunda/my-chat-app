@@ -64,17 +64,27 @@ export default function () {
 
 
     useEffect(() => {
-        getUserData().then(data => {
-            if (data) setUserData(data)
-        }).catch(() => { })
-        !(async () => {
+        getUserData().then( async data => {
+            if (data){
+                userData = data
+                setUserData(oldData=>data)
+            }
+            
             let groupData = await getGroupById(params.groupId)
             if (groupData) {
                 setGroupData(groupData)
             } else {
                 console.log('send api')
             }
-            setModalData({ imageName: groupData.name, imageUrl: groupData.imageUrl })
+
+            if (!groupData.isDirect){
+                setModalData({ imageName: groupData.name, imageUrl: groupData.imageUrl })
+            }else{
+                console.log('userData', userData._id)
+                let user = groupData.participants[0]._id == userData._id?groupData.participants[1]:groupData.participants[0]
+                setGroupData( oldData=>({ ...oldData, name: user.name, imageUrl: user.imageUrl }) )
+                setModalData({ imageTitle: user.name, imageUrl: user.imageUrl })
+            }
 
             let messages = await getMessagesByGroupId(params.groupId)
             if (messages?.length) {
@@ -89,7 +99,7 @@ export default function () {
                 setMessageList(messageList => [...messageList, messageData])
                 storeInLocal(params.groupId, messageList)
             } )
-        })()
+        }).catch(() => { console.log(err) })
     }, [])
     useEffect(() => {
         // Scroll to the bottom when content changes
