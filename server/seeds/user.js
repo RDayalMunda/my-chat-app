@@ -1,8 +1,8 @@
 module.exports = [
     {
         "_id": "65f65f79d2b94e847543c44e",
-        "name": "Ram",
-        "userName": "ram123",
+        "name": "Althea",
+        "userName": "althea",
         "imageUrl": "9d65fc53351e9bfcbd264211a8c5c141.jpeg",
         "password": "$2b$10$mDvxOCJqEHY4HySNjzzfneobnJ9.JA.YMmR4w6iQPyYmUyW93l55W"
     },

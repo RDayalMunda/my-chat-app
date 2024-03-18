@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
-import { Modal, Pressable, StyleSheet, Text, View, Animated, Button, TouchableOpacity, Image } from "react-native";
+import { Modal, Pressable, StyleSheet, Text, View, Animated, Button, TouchableOpacity, Image, ScrollView } from "react-native";
 import { androidRipple } from "../../common/styles";
 import { logout } from "../../common/auth";
 import { getUserData } from "../../common/localstorage";
@@ -57,8 +57,8 @@ export default function ({ loginhandler }) {
                     headerRight: () => (
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Pressable
-                            android_ripple={androidRipple.light}
-                            onPress={() => { setVisible(true) }}
+                                android_ripple={androidRipple.light}
+                                onPress={() => { setVisible(true) }}
                             >
                                 <Image
                                     source={{ uri: `http://192.168.105.212:3081/images/${userData.imageUrl}` }}
@@ -88,20 +88,32 @@ export default function ({ loginhandler }) {
                         <View
                             style={styles.modalContent}
                         >
-                            <Pressable
-                                android_ripple={androidRipple.light}
-                                style={styles.btn}
-                                onPress={() => { animateModal(-1000, true) }}
-                            >
-                                <Text style={styles.textCenter}>Close</Text>
-                            </Pressable>
-                            <Pressable
-                                android_ripple={androidRipple.light}
-                                style={styles.btn}
-                                onPress={toLogout}
-                            >
-                                <Text style={styles.textCenter}>Logout</Text>
-                            </Pressable>
+
+                            <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                                <Pressable style={styles.btn} onPress={()=>{ animateModal(-1000, true) }}>
+                                    <Text style={styles.textCenter}>X</Text>
+                                </Pressable>
+                            </View>
+                            <ScrollView style={styles.modalMainBody}>
+                                <View style={{ alignItems: 'center' }}>
+                                    <Pressable
+                                        android_ripple={androidRipple.light}
+                                    >
+                                        <Image
+                                            source={{ uri: `http://192.168.105.212:3081/images/${userData.imageUrl}` }}
+                                            style={[styles.imageProfile ]}
+                                        />
+                                        <Text style={styles.profileText}>{userData.name}</Text>
+                                    </Pressable>
+                                </View>
+
+                            </ScrollView>
+                            
+                            <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+                                <Pressable style={ styles.btn } onPress={toLogout}>
+                                    <Text style={styles.textCenter}>Logout</Text>
+                                </Pressable>
+                            </View>
                         </View>
                     </Animated.View>
                 </View>
@@ -147,9 +159,26 @@ const styles = StyleSheet.create({
     btn: {
         backgroundColor: '#7e7e7e',
         padding: 5,
+        paddingHorizontal: 20,
         borderRadius: 5,
+        minHeight: 30,
+        minWidth: 30,
     },
     textCenter: {
         textAlign: 'center'
     },
+    modalMainBody: {
+        flexGrow: 1,
+    },
+    imageProfile: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        resizeMode: 'cover', // Adjust the image resizing mode as needed
+        marginTop: 20,
+    },
+    profileText: {
+        textAlign: 'center',
+        fontSize: 20,
+    }
 })
