@@ -13,3 +13,7 @@ module.exports.removeSocket = async function ( userId, socketId ){
 module.exports.getAllSocketByUserId = async function(userId){
     return await model.OnlineUser.find( { userId } )
 }
+
+module.exports.clearAllOnlineUsers = async function(){
+    return await model.OnlineUser.deleteMany()
+}

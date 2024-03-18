@@ -14,7 +14,7 @@ app.use("/group", require("./router/group.js"))
 app.use("/chat", require("./router/chat.js"))
 
 app.listen(CONFIG.PORT, () => {
-    console.log(`chat app running on http://localhost:${CONFIG.PORT}`)
+    console.log(`chat app running on ${CONFIG.LOCALHOST}:${CONFIG.PORT}`)
     mongoose.connect(CONFIG.MDB.URL).then(() => {
         console.log('MDB connected')
     }).catch(err => {
