@@ -6,6 +6,8 @@ import Group from "../group/group";
 import { getSession } from "../../common/auth";
 import Loading from "../loading/loading";
 import { getUserData } from "../../common/localstorage";
+import BurgerMenu from "./burger-menu";
+
 export default function(){
 
 
@@ -41,7 +43,10 @@ export default function(){
             inProgress? (
                 <Loading />
             ):session? (
-                <Group session={session} loginhandler={loginhandler}/>
+                <>
+                    <BurgerMenu />
+                    <Group session={session} loginhandler={loginhandler}/>
+                </>
             ):(
                 <Login loginhandler={loginhandler} />
             )}
