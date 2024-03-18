@@ -35,7 +35,8 @@ export default ( { loginhandler } ) => {
         <View style={styles.container}>
             <Stack.Screen
                 options={{
-                    title: "Login"
+                    title: "Login",
+                    headerRight: ()=>(<></>)
                 }}
             />
             <Image
