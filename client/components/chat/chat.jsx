@@ -81,7 +81,6 @@ export default function () {
             if (!groupData.isDirect){
                 setModalData({ title: groupData.name, imageUrl: groupData.imageUrl })
             }else{
-                console.log('userData', userData._id)
                 let user = groupData.participants[0]._id == userData._id?groupData.participants[1]:groupData.participants[0]
                 setGroupData( oldData=>({ ...oldData, name: user.name, imageUrl: user.imageUrl }) )
                 setModalData({ title: user.name, imageUrl: user.imageUrl })

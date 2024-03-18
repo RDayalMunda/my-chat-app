@@ -46,7 +46,6 @@ export default function ({ loginhandler }) {
     }
 
     const setupModal = (data) => {
-        console.log('setup modal', data.name, !data.isDirect)
         if (!data.isDirect){
             setModalData({ title: data.name, imageUrl: data.imageUrl })
         } else {
