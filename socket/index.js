@@ -1,7 +1,7 @@
 const http = require('http');
 const mongoose = require("mongoose")
 
-const { PORT, MDB, LOCALHOST } = require('./config');
+const { PORT, MDB, LOCALHOST, CLIENT_ORIGIN } = require('./config');
 const chatController = require('./controller/chat');
 const userController = require('./controller/user');
 const { clearAllOnlineUsers } = require('./dao/online-user');
@@ -11,7 +11,7 @@ const server = http.createServer();
 
 const io = require("socket.io")( server, {
     cors: {
-        origin: `http://192.168.105.212:8081`,
+        origin: CLIENT_ORIGIN,
         methods: ["GET", "POST"],
         allowedHeaders: ["Access-Control-Allow-Origin"],
         credentials: true

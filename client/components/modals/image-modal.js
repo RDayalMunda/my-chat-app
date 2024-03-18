@@ -1,5 +1,6 @@
-import { Modal, View, Text, TouchableOpacity, Image, StyleSheet, Dimensions } from "react-native"
-export default function ( { title, imageUrl, modalVisible, closeModal } ) {
+import { Modal, View, Text, TouchableOpacity, Image, StyleSheet } from "react-native"
+
+export default function ({ title, imageUrl, modalVisible, closeModal }) {
     return (
 
         <Modal
@@ -9,58 +10,79 @@ export default function ( { title, imageUrl, modalVisible, closeModal } ) {
             onRequestClose={closeModal}
         >
 
-            <View style={styles.modalContainer}>
+
+            <View style={styles.modalBackground}>
                 <View style={styles.modalContent}>
-                    <View style={styles.modalTitle} >
-                        <Text>{title}</Text>
-                        <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
-                            <Text style={{ textAlign: 'center', marginTop: 2 }}>X</Text>
+                    {/* Header */}
+                    <View style={styles.header}>
+                        <Text style={styles.title}>{title}</Text>
+                        <TouchableOpacity onPress={closeModal}>
+                            <Text style={styles.closeButton}>Close</Text>
                         </TouchableOpacity>
                     </View>
-                    <View>
+
+                    {/* Content */}
+                    <View style={styles.content}>
                         <Image
                             source={{ uri: `http://192.168.105.212:3081/images/${imageUrl}` }}
-                            style={styles.modalImage}
+                            style={styles.image}
+                            resizeMode="contain"
                         />
                     </View>
+
+                    {/* Footer */}
+                    {/* <View style={styles.footer}>
+                        <Button title="Button 1" onPress={() => { }} />
+                        <Button title="Button 2" onPress={() => { }} />
+                    </View> */}
                 </View>
             </View>
 
         </Modal>
     )
 }
-
 const styles = StyleSheet.create({
-    modalContainer: {
+    modalBackground: {
         flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
     },
     modalContent: {
-        width: Dimensions.get('window').width - 30,
-        // height: Dimensions.get('window').height-30,
         backgroundColor: '#fff',
-        padding: 20,
+        width: '80%',
+        height: '80%',
         borderRadius: 10,
-        elevation: 5,
+        padding: 20,
     },
-    modalTitle: {
+    header: {
         flexDirection: 'row',
-        verticalAlign: 'middle',
         justifyContent: 'space-between',
+        alignItems: 'center',
         marginBottom: 10,
     },
-    modalImage: {
-        width: '100%',
-        resizeMode: 'contain',
-        minHeight: Dimensions.get('window').width,
+    title: {
+        fontSize: 18,
+        fontWeight: 'bold',
     },
     closeButton: {
         color: 'blue',
-        backgroundColor: '#789',
-        width: 24,
-        height: 24,
-        borderRadius: 5,
+    },
+    content: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    image: {
+        width: '100%',
+        height: '100%',
+        borderRadius: 10,
+    },
+    footer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        borderTopWidth: 1,
+        borderTopColor: '#ccc',
+        paddingTop: 10,
     },
 });
