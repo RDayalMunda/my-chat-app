@@ -71,24 +71,7 @@ export default function ({ loginhandler }) {
         <ScrollView>
             <Stack.Screen
                 options={{
-                    title: "My Chat App",
-                    headerRight: () => (
-                        <View style={{  flexDirection: 'row', alignItems: 'center' }}>
-                            <TouchableOpacity onPress={() =>{ setupModal(userData) }} >
-                                <Image
-                                    source={{ uri: `http://192.168.105.212:3081/images/${userData.imageUrl}` }}
-                                    style={styles.image}
-                                />
-                            </TouchableOpacity>
-                            
-                            <Pressable android_ripple={androidRipple.dark}
-                                onPress={toLogout}
-                                style={styles.logoutBtn}
-                            >
-                                <Text>Logout</Text>
-                            </Pressable>
-                        </View>
-                    )
+                    title: "My Chat App"
                 }}
             />
             <SafeAreaView>

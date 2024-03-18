@@ -1,16 +1,19 @@
 import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
-import { Modal, Pressable, StyleSheet, Text, View, Animated, Button } from "react-native";
+import { Modal, Pressable, StyleSheet, Text, View, Animated, Button, TouchableOpacity, Image } from "react-native";
 import { androidRipple } from "../../common/styles";
+import { logout } from "../../common/auth";
+import { getUserData } from "../../common/localstorage";
 
-export default function () {
-    let [visible, setVisible] = useState(true)
+export default function ({ loginhandler }) {
+    let [visible, setVisible] = useState(false)
+    var [userData, setUserData] = useState({})
     const [slideAnim] = useState(new Animated.Value(-1000));
 
 
 
-    const animateModal = (toValue, toClose)=>{
-        
+    const animateModal = (toValue, toClose) => {
+
         Animated.timing(
             slideAnim,
             {
@@ -18,34 +21,51 @@ export default function () {
                 duration: 300,
                 useNativeDriver: true,
             }
-        ).start(()=>{
-            if(toClose) setVisible(false)
+        ).start(() => {
+            if (toClose) setVisible(false)
         });
     }
 
-    useEffect( ()=>{
+
+    async function toLogout() {
+        await logout()
+        await loginhandler()
+    }
+
+    useEffect(() => {
 
 
-        if (visible){
+        if (visible) {
             animateModal(0)
-        }else{
+        } else {
             animateModal(-1000, true)
         }
 
-    }, [ visible ] )
+    }, [visible])
+
+    useEffect(() => {
+        getUserData().then(data => {
+            userData = data
+            setUserData(oldData => data)
+        })
+    }, [])
 
     return (
         <View style={styles.container}>
             <Stack.Screen
                 options={{
-                    headerLeft: () => (
-                        <Pressable
-                            style={styles.burgerBtn}
-                            onPress={()=>{ setVisible(true) }}
+                    headerRight: () => (
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <Pressable
                             android_ripple={androidRipple.light}
-                        >
-                            <Text>Burger</Text>
-                        </Pressable>
+                            onPress={() => { setVisible(true) }}
+                            >
+                                <Image
+                                    source={{ uri: `http://192.168.105.212:3081/images/${userData.imageUrl}` }}
+                                    style={styles.image}
+                                />
+                            </Pressable>
+                        </View>
                     )
                 }}
             />
@@ -54,7 +74,7 @@ export default function () {
                 transparent={true}
                 visible={visible}
                 animationType="fade"
-                onRequestClose={()=>{ animateModal(-1000, true) }}
+                onRequestClose={() => { animateModal(-1000, true) }}
             >
                 <View style={styles.modalBackground}>
                     <Animated.View
@@ -65,8 +85,24 @@ export default function () {
                             }
                         ]}
                     >
-                        <Button title="Close Modal" onPress={()=>{ animateModal(-1000, true) }} />
-                        <Text>Modal Content</Text>
+                        <View
+                            style={styles.modalContent}
+                        >
+                            <Pressable
+                                android_ripple={androidRipple.light}
+                                style={styles.btn}
+                                onPress={() => { animateModal(-1000, true) }}
+                            >
+                                <Text style={styles.textCenter}>Close</Text>
+                            </Pressable>
+                            <Pressable
+                                android_ripple={androidRipple.light}
+                                style={styles.btn}
+                                onPress={toLogout}
+                            >
+                                <Text style={styles.textCenter}>Logout</Text>
+                            </Pressable>
+                        </View>
                     </Animated.View>
                 </View>
             </Modal>
@@ -78,7 +114,17 @@ const styles = StyleSheet.create({
     container: {
         position: 'absolute',
         zIndex: 10,
-        backgroundColor: '#00000078'
+    },
+    image: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        resizeMode: 'cover', // Adjust the image resizing mode as needed
+    },
+    logoutBtn: {
+        overflow: 'hidden',
+        backgroundColor: '#aaa',
+        padding: 5,
     },
     modalBackground: {
         flex: 1,
@@ -94,9 +140,16 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 10,
         padding: 20,
     },
-    burgerBtn: {
-        backgroundColor: '#3f5fa6',
+    modalContent: {
+        height: "100%",
+        justifyContent: 'space-between'
+    },
+    btn: {
+        backgroundColor: '#7e7e7e',
         padding: 5,
         borderRadius: 5,
-    }
+    },
+    textCenter: {
+        textAlign: 'center'
+    },
 })

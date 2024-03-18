@@ -44,7 +44,7 @@ export default function(){
                 <Loading />
             ):session? (
                 <>
-                    <BurgerMenu />
+                    <BurgerMenu loginhandler={loginhandler}/>
                     <Group session={session} loginhandler={loginhandler}/>
                 </>
             ):(
