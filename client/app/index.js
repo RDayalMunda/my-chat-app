@@ -1,8 +1,6 @@
 import io from "socket.io-client"
 import Home from "../components/home/home"
-
-import { CLIENT_ORIGIN, CLIENT_PORT } from "../config"
-
+import { CLIENT_ORIGIN, CLIENT_PORT } from "../common/api"
 
 export default function (){
     return (

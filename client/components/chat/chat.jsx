@@ -1,10 +1,9 @@
 import { Stack, useLocalSearchParams } from "expo-router"
 import { useEffect, useRef, useState } from "react"
 import { Text, Image, View, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Pressable, Dimensions } from "react-native"
-import api from "../../common/api"
+import api, { IMAGE_URL } from "../../common/api"
 import { getFromLocal, getGroupById, getMessagesByGroupId, getUserData, storeInLocal } from "../../common/localstorage"
 import ImageModal from "../modals/image-modal"
-import { IMAGE_URL } from "../../config"
 
 
 export default function () {

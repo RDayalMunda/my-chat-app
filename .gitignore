@@ -1,6 +1,5 @@
 client/node_modules/
 client/.expo/
-client/config.js
 client/android/
 
 server/node_modules/

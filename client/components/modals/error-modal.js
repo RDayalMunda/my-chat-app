@@ -1,7 +1,6 @@
-import { Modal, View, Text, TouchableOpacity, Image, StyleSheet } from "react-native"
-import { IMAGE_URL } from "../../common/api";
+import { Modal, View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native"
 
-export default function ({ title, imageUrl, modalVisible, closeModal }) {
+export default function ({ title, text, modalVisible, closeModal }) {
     return (
 
         <Modal
@@ -14,7 +13,6 @@ export default function ({ title, imageUrl, modalVisible, closeModal }) {
 
             <View style={styles.modalBackground}>
                 <View style={styles.modalContent}>
-                    {/* Header */}
                     <View style={styles.header}>
                         <Text style={styles.title}>{title}</Text>
                         <TouchableOpacity onPress={closeModal}>
@@ -22,20 +20,15 @@ export default function ({ title, imageUrl, modalVisible, closeModal }) {
                         </TouchableOpacity>
                     </View>
 
-                    {/* Content */}
-                    <View style={styles.content}>
-                        <Image
-                            source={{ uri: `${IMAGE_URL}/${imageUrl}` }}
-                            style={styles.image}
-                            resizeMode="contain"
-                        />
-                    </View>
+                    <ScrollView contentContainerStyle={styles.contentContainer}>
+                        <Text>{text}</Text>
+                    </ScrollView>
 
-                    {/* Footer */}
-                    {/* <View style={styles.footer}>
-                        <Button title="Button 1" onPress={() => { }} />
-                        <Button title="Button 2" onPress={() => { }} />
-                    </View> */}
+                    <View style={styles.footer}>
+                        <TouchableOpacity onPress={closeModal}>
+                            <Text style={styles.closeButton}>Close</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
 
@@ -74,10 +67,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    image: {
-        width: '100%',
-        height: '100%',
-        borderRadius: 10,
+    contentContainer: {
+        flexGrow: 1,
+        paddingBottom: 10,
     },
     footer: {
         flexDirection: 'row',

@@ -1,12 +1,13 @@
 const express = require("express")
-const app = express()
 const CONFIG = require("./config.js")
 const mongoose = require("mongoose")
+
+const app = express()
 const cors = require('cors')
+app.use(cors())
 
 require("./controller/socket.js")
 
-app.use(cors())
 app.use(express.json())
 
 app.use('/auth', require("./router/auth.js"))

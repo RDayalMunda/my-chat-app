@@ -4,7 +4,7 @@ import { Modal, Pressable, StyleSheet, Text, View, Animated, Button, TouchableOp
 import { androidRipple } from "../../common/styles";
 import { logout } from "../../common/auth";
 import { getUserData } from "../../common/localstorage";
-import { IMAGE_URL } from "../../config";
+import { IMAGE_URL } from "../../common/api";
 
 export default function ({ loginhandler }) {
     let [visible, setVisible] = useState(false)

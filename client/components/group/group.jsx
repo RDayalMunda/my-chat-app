@@ -2,12 +2,11 @@ import { Text, ScrollView, TouchableOpacity, View, SafeAreaView, Pressable, Imag
 import { useRouter, Stack } from "expo-router"
 import { useEffect, useState } from "react"
 
-import api from "../../common/api"
+import api, { IMAGE_URL } from "../../common/api"
 import { androidRipple } from "../../common/styles"
 import { logout } from "../../common/auth"
 import { getUserData, storeInLocal } from "../../common/localstorage"
 import ImageModal from "../modals/image-modal"
-import { IMAGE_URL } from "../../config"
 
 export default function ({ loginhandler }) {
     let router = useRouter()

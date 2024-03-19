@@ -1,6 +1,9 @@
 {
   "expo": {
     "scheme": "acme",
+    "assetBundlePatterns": [
+      "assets/**/*"
+    ],
     "web": {
       "bundler": "metro"
     },

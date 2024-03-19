@@ -120,3 +120,28 @@ npm start
 
 # BUILDING YOUR APPLICATION
 Check [Link](https://instamobile.io/android-development/generate-react-native-release-build-android/)
+
+to build online with eas.
+```bash
+eas build --platform android
+```
+
+# Builing Apk locally
+First we need the android data folder.
+For this you need to have Android Studio installed and a virtual device setup
+
+```bash
+npx expo run:android
+```
+This command will create the android data folder and launch the app in the virtual device
+
+You can close the virtul device.
+
+Go to the android directory and run gradle commnad
+
+```
+cd client
+cd android
+gradlew :app:bundleRelease
+```
+This will generate the aab file
