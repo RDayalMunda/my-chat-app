@@ -121,12 +121,12 @@ npm start
 # BUILDING YOUR APPLICATION
 Check [Link](https://instamobile.io/android-development/generate-react-native-release-build-android/)
 
-to build online with eas.
+## to build online with EAS.
 ```bash
 eas build --platform android
 ```
 
-# Builing Apk locally
+## Builing Apk locally
 First we need the android data folder.
 For this you need to have Android Studio installed and a virtual device setup
 
@@ -145,3 +145,32 @@ cd android
 gradlew :app:bundleRelease
 ```
 This will generate the aab file
+
+You need to download bundletools provided by android studio to pack your aab file into apk. That you can share in install on any android devices.
+
+For this Example download the `.jar` file provided you in this [link](https://developer.android.com/tools/bundletool).
+
+Use this command to generate the apks
+```bash
+
+# this is syntax
+java -jar bundletool.jar build-apks --bundle=/path/to/your/app.aab --output=/path/to/output/app.apks --mode=universal
+
+# this is the actual command I used in my system
+java -jar bundletool-all-1.15.6.jar build-apks --bundle=E:/projects/react-natives/my-chat-app/client/android/app/build/outputs/bundle/release/app-release.aab --output=E:/projects/react-natives/my-chat-app/client/android/app/build/outputs/bundle/release/my-chat-app.apks --mode=universal
+```
+
+This command create bundle of apk files inside a single apk file
+
+This required a device json file. If you dont have the device json for the device your device just create a json file ith the following content
+```json
+{
+  "supportedAbis": ["arm64-v8a", "armeabi-v7a"],
+  "supportedLocales": ["en", "fr"],
+  "screenDensity": 640,
+  "sdkVersion": 27
+}
+```
+```bash
+java -jar bundletool-all-1.15.6.jar extract-apks --apks=E:/projects/react-natives/my-chat-app/client/android/app/build/outputs/bundle/release/my-chat-app.apks --output-dir=E:/projects/react-natives/my-chat-app/client/android/app/build/outputs/bundle/release --device-spec=E:/projects/react-natives/device.json
+```
