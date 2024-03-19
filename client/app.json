@@ -7,7 +7,18 @@
     "plugins": [
       "expo-router"
     ],
-    "name": "client",
-    "slug": "client"
+    "name": "mychatapp",
+    "slug": "mychatapp",
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "f29b50d7-79d1-4518-bb40-8b5276174daa"
+      }
+    },
+    "android": {
+      "package": "com.rdayalmunda.mychatapp"
+    }
   }
 }

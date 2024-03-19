@@ -52,11 +52,15 @@ export default function () {
 
     async function sendMessage() {
         try {
+            console.log('message:', messageObj.text)
+            if (!messageObj?.text?.trim()){
+                return
+            }
             let payload = {
                 ...messageObj,
                 userId: userData._id,
             }
-            let { data } = await api.post("/chat/message", payload)
+            await api.post("/chat/message", payload)
             setMessageObj( { ...messageObj, text: "" } )
         } catch (err) {
             console.log(err)
