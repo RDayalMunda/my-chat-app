@@ -8,7 +8,7 @@
       "expo-router"
     ],
     "name": "mychatapp",
-    "slug": "mychatapp",
+    "slug": "client",
     "extra": {
       "router": {
         "origin": false
