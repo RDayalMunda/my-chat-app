@@ -204,3 +204,11 @@ Now we need to link this file to the `AndroidManifest.xml` file which is present
 ```
 
 Rebuild the apk again and you are good to go.
+
+
+## How to add your custom icon
+Go inside `\android\app\src\main\res` folder. You will find folder named `mipmap-hdpi`, `mipmap-mdpi`, `mipmap-xhdpi`, `mipmap-xxhdpi`, `mipmap-xxxhdpi`. In each of folder mentioned there are 2 images named `ic_launcher.png` and `ic_launcher_round.png`.
+
+Just replace them with your images make sure that the name are not changed. There should be a `ic_launcher.png` and `ic_launcher_round.png` file in each of the above mentioned folders.
+
+After this you can build your app again.
