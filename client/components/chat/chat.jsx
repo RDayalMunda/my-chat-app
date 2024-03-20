@@ -163,13 +163,17 @@ export default function () {
                     placeholder="Enter text..."
                     onChangeText={(text) => { setMessageObj({ ...messageObj, text: text }) }}
                     value={messageObj.text}
+                    multiline={true}
                 />
-                <Pressable
-                    style={styles.pressable}
-                    onPress={sendMessage}
-                >
-                    <Text>Send</Text>
-                </Pressable>
+                <View style={{justifyContent:"center"}}>
+                    
+                    <Pressable 
+                        style={styles.btn}
+                        onPress={sendMessage}
+                    >
+                        <Text style={styles.textEmoji}>➤</Text>
+                    </Pressable>
+                </View>
             </View>
 
 
@@ -290,14 +294,20 @@ let styles = StyleSheet.create({
         marginRight: 10,
         borderWidth: 1,
         borderColor: '#ccc',
-        borderRadius: 50,
+        borderRadius: 5,
         paddingVertical: 5,
         paddingHorizontal: 10,
+        maxHeight: Dimensions.get('window').height/5,
     },
-    pressable: {
-        backgroundColor: "#3f5",
-        height: '100%',
-        justifyContent: 'center',
-        borderRadius: 50,
+    btn: {
+        backgroundColor: "#bfe762",
+        // height: '100%',
+        // justifyContent: 'center',
+        borderRadius: 5,
+    },
+    textEmoji: {
+        fontSize: 24,
+        paddingHorizontal: 5,
+        paddingBottom: 5,
     }
 })

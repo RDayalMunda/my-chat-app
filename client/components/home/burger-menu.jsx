@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
-import { Modal, Pressable, StyleSheet, Text, View, Animated, Button, TouchableOpacity, Image, ScrollView } from "react-native";
+import { Modal, Pressable, StyleSheet, Text, View, Animated, Button, Image, ScrollView, useColorScheme } from "react-native";
 import { androidRipple } from "../../common/styles";
 import { logout } from "../../common/auth";
 import { getUserData } from "../../common/localstorage";
@@ -10,6 +10,9 @@ export default function ({ loginhandler }) {
     let [visible, setVisible] = useState(false)
     var [userData, setUserData] = useState({})
     const [slideAnim] = useState(new Animated.Value(-1000));
+    let colourScheme = useColorScheme()
+
+    let styles = colourScheme=='dark'?darkStyle:lightStyle
 
 
 
@@ -67,7 +70,10 @@ export default function ({ loginhandler }) {
                                 />
                             </Pressable>
                         </View>
-                    )
+                    ),
+                    headerStyle: styles.headerStyle,
+                    headerTitleStyle: styles.text,
+                    statusBarColor: styles.statusbar.color,
                 }}
             />
 
@@ -123,7 +129,12 @@ export default function ({ loginhandler }) {
     )
 }
 
-const styles = StyleSheet.create({
+const lightStyle = StyleSheet.create({
+    statusbar: { color: "#154" },
+    headerStyle:{
+        backgroundColor: "#ddd",
+    },
+    text: { color: "#111" },
     container: {
         position: 'absolute',
         zIndex: 10,
@@ -133,6 +144,71 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 25,
         resizeMode: 'cover', // Adjust the image resizing mode as needed
+        borderColor: '#11111178',
+        borderWidth: 1,
+    },
+    logoutBtn: {
+        overflow: 'hidden',
+        backgroundColor: '#aaa',
+        padding: 5,
+    },
+    modalBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    animateBox: {
+        backgroundColor: '#fff',
+        width: '80%',
+        height: '100%',
+        borderTopRightRadius: 10,
+        borderBottomRightRadius: 10,
+        padding: 20,
+    },
+    modalContent: {
+        height: "100%",
+        justifyContent: 'space-between'
+    },
+    btn: {
+        backgroundColor: '#7e7e7e',
+        padding: 5,
+        paddingHorizontal: 20,
+        borderRadius: 5,
+        minHeight: 30,
+        minWidth: 30,
+    },
+    textCenter: {
+        textAlign: 'center'
+    },
+    modalMainBody: {
+        flexGrow: 1,
+    },
+    imageProfile: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        resizeMode: 'cover', // Adjust the image resizing mode as needed
+        marginTop: 20,
+    },
+    profileText: {
+        textAlign: 'center',
+        fontSize: 20,
+    }
+})
+const darkStyle = StyleSheet.create({
+    ...lightStyle,
+    headerStyle:{
+        backgroundColor: "#111",
+    },
+    text: { color: "#eee" },
+    container: {
+        position: 'absolute',
+        zIndex: 10,
+    },
+    image: {
+        ...lightStyle.image,
+        borderColor: '#eeeeee',
     },
     logoutBtn: {
         overflow: 'hidden',
