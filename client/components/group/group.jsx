@@ -1,4 +1,4 @@
-import { Text, ScrollView, TouchableOpacity, View, SafeAreaView, Pressable, Image, StyleSheet, Dimensions } from "react-native"
+import { Text, ScrollView, TouchableOpacity, View, SafeAreaView, Pressable, Image, StyleSheet, Dimensions, useColorScheme } from "react-native"
 import { useRouter, Stack } from "expo-router"
 import { useEffect, useState } from "react"
 
@@ -18,6 +18,7 @@ export default function ({ loginhandler }) {
         title: "",
         imageUrl: "",
     })
+    let styles = (useColorScheme()=='dark')?darkStyle:lightStyle
 
     function navigateTo(path, query) {
         router.push({
@@ -93,10 +94,10 @@ export default function ({ loginhandler }) {
                             </TouchableOpacity>
                             
                             <Text
-                                style={{
+                                style={[ styles.text, {
                                     fontSize: 15,
                                     paddingLeft: 15,
-                                }}
+                                } ]}
                             >{
                                 !item?.isDirect?item.name:(
                                     userData._id==item.participants[0]._id?
@@ -107,7 +108,7 @@ export default function ({ loginhandler }) {
                         </View>
                         {item?.unseenCount?(
                         <View style={styles.unseenContainer}>
-                            <Text style={styles.unseenCount}>{item.unseenCount}</Text>
+                            <Text style={[styles.unseenCount, styles.text]}>{item.unseenCount}</Text>
                         </View>
                         ):<></>}
                     </TouchableOpacity>
@@ -124,7 +125,7 @@ export default function ({ loginhandler }) {
     )
 }
 
-const styles = StyleSheet.create({
+const lightStyle = StyleSheet.create({
     image: {
         width: 50,
         height: 50,
@@ -139,6 +140,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         justifyContent: 'space-between',
         paddingVertical: 8,
+        backgroundColor: "#eee",
     },
     unseenContainer: {
         backgroundColor: "#3f5",
@@ -150,43 +152,19 @@ const styles = StyleSheet.create({
     unseenCount: {
         textAlign: 'center',
     },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+    text: {
+        color: "#000"
     },
-    modalContent: {
-        width: Dimensions.get('window').width - 30,
-        // height: Dimensions.get('window').height-30,
-        backgroundColor: '#fff',
-        padding: 20,
-        borderRadius: 10,
-        elevation: 5,
-    },
-    modalTitle: {
-        flexDirection: 'row',
-        verticalAlign: 'middle',
-        justifyContent: 'space-between',
-        marginBottom: 10,
-    },
-    modalImage: {
-        width: '100%',
-        resizeMode: 'contain',
-        minHeight: Dimensions.get('window').width,
-    },
-    closeButton: {
-        color: 'blue',
-        backgroundColor: '#789',
-        width: 24,
-        height: 24,
-        borderRadius: 5,
-    },
-    logoutBtn: {
-        borderRadius: 5,
-        overflow: 'hidden',
-        backgroundColor: '#aaa',
-        padding: 5,
-        marginLeft: 5,
-    }
 });
+
+const darkStyle = StyleSheet.create({
+    ...lightStyle,
+    
+    groupItem: {
+        ...lightStyle.groupItem,
+        backgroundColor: "#333",
+    },
+    text: {
+        color: "#999"
+    },
+})

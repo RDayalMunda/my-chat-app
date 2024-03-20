@@ -1,6 +1,6 @@
 import { Stack, useLocalSearchParams } from "expo-router"
 import { useEffect, useRef, useState } from "react"
-import { Text, Image, View, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Pressable, Dimensions } from "react-native"
+import { Text, Image, View, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Pressable, Dimensions, useColorScheme } from "react-native"
 import api, { IMAGE_URL } from "../../common/api"
 import { getFromLocal, getGroupById, getMessagesByGroupId, getUserData, storeInLocal } from "../../common/localstorage"
 import ImageModal from "../modals/image-modal"
@@ -8,6 +8,7 @@ import ImageModal from "../modals/image-modal"
 
 export default function () {
     const params = useLocalSearchParams()
+    const styles = (useColorScheme()=='dark')?darkStyle:lightStyle
 
     let [userData, setUserData] = useState({})
 
@@ -125,7 +126,11 @@ export default function () {
                             />
                         </TouchableOpacity>
                     ),
-                    headerTitle: () => (<Text style={styles.headerTitle}>{groupData?.name}</Text>)
+                    headerTitle: () => (<Text style={styles.headerTitle}>{groupData?.name}</Text>),
+                    statusBarColor: styles.statusbar.color,
+                    headerStyle: styles.headerStyle,
+                    headerTitleStyle: styles.text,
+                    headerTintColor: styles.text.color,
                 }}
             />
 
@@ -163,6 +168,7 @@ export default function () {
                     placeholder="Enter text..."
                     onChangeText={(text) => { setMessageObj({ ...messageObj, text: text }) }}
                     value={messageObj.text}
+                    placeholderTextColor={styles.placeholder.color}
                     multiline={true}
                 />
                 <View style={{justifyContent:"center"}}>
@@ -189,7 +195,12 @@ export default function () {
     )
 }
 
-let styles = StyleSheet.create({
+const lightStyle = StyleSheet.create({
+    statusbar: { color: "#154" },
+    headerStyle:{
+        backgroundColor: "#ddd",
+    },
+    text: { color: "#111" },
     headerImage: {
         width: 50,
         height: 50,
@@ -199,16 +210,17 @@ let styles = StyleSheet.create({
     headerTitle: {
         fontSize: 18,
         paddingLeft: 10,
+        color: "#111"
     },
 
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#ddd',
     },
     scrollArea: {
         flexGrow: 1,
         paddingBottom: 70, // Adjust this value to leave space for the input area
-        width: Dimensions.get('window').width
+        width: Dimensions.get('window').width,
     },
     messageContainerEmpty: {
         justifyContent: 'center',
@@ -282,23 +294,24 @@ let styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 5,
         borderTopWidth: 1,
-        borderTopColor: '#ccc',
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
+        borderTopColor: '#ccc',
         backgroundColor: '#fff',
     },
     input: {
         flex: 1,
         marginRight: 10,
         borderWidth: 1,
-        borderColor: '#ccc',
         borderRadius: 5,
         paddingVertical: 5,
         paddingHorizontal: 10,
         maxHeight: Dimensions.get('window').height/5,
+        borderColor: '#ccc',
     },
+    placeholder: { color: "#777" },
     btn: {
         backgroundColor: "#bfe762",
         // height: '100%',
@@ -310,4 +323,30 @@ let styles = StyleSheet.create({
         paddingHorizontal: 5,
         paddingBottom: 5,
     }
+})
+
+const darkStyle = StyleSheet.create({
+    ...lightStyle,
+    headerStyle:{
+        backgroundColor: "#111",
+    },
+    text: { color: "#ddd" },
+    headerTitle: {
+        ...lightStyle.headerTitle,
+        color: "#ddd"
+    },
+    container: {
+        ...lightStyle.container,
+        backgroundColor: '#222',
+    },
+    inputContainer: {
+        ...lightStyle.inputContainer,
+        borderTopColor: '#888',
+        backgroundColor: '#444',
+    },
+    input: {
+        ...lightStyle.input,
+        backgroundColor: "#444",
+        color: "#fff",
+    },
 })

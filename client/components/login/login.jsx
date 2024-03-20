@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Stack } from "expo-router"
 
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Pressable, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Pressable, Image, useColorScheme } from 'react-native';
 import { androidRipple } from '../../common/styles';
 import api from '../../common/api';
 import { storeInLocal } from '../../common/localstorage';
@@ -14,6 +14,7 @@ export default ({ loginhandler }) => {
     const closeModal = function(){
         setErrorModal( oldData=> ({ ...oldData, modalVisible: false }) )
     }
+    const styles = (useColorScheme()=='dark')?darkStyle:lightStyle
 
     const handleSignIn = async () => {
         // Implement sign-in logic here
@@ -47,7 +48,10 @@ export default ({ loginhandler }) => {
                 <Stack.Screen
                     options={{
                         title: "Login",
-                        headerRight: () => (<></>)
+                        headerRight: () => (<></>),
+                        statusBarColor: styles.statusbar.color,
+                        headerStyle: styles.headerStyle,
+                        headerTitleStyle: styles.text,
                     }}
                 />
                 <View>
@@ -62,12 +66,16 @@ export default ({ loginhandler }) => {
                     onChangeText={setUsername}
                     value={userName}
                     autoCapitalize="none"
+                    placeholderTextColor={styles.placeholder.color}
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Password"
                     onChangeText={setPassword}
                     value={password}
+                    placeholderTextColor={styles.placeholder.color}
+                    onSubmitEditing={handleSignIn}
+                    returnKeyType='done'
                     secureTextEntry
                 />
                 <View style={styles.buttonContainer}>
@@ -87,12 +95,18 @@ export default ({ loginhandler }) => {
     );
 };
 
-const styles = StyleSheet.create({
+const lightStyle = StyleSheet.create({
+    statusbar: { color: "#154" },
+    headerStyle:{
+        backgroundColor: "#ddd",
+    },
+    text: { color: "#111" },
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         paddingHorizontal: 20,
+        backgroundColor: "#eee",
     },
     logo: {
         width: 100,
@@ -109,6 +123,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         backgroundColor: "#fff",
     },
+    placeholder: { color: "#777" },
     buttonContainer: {
         backgroundColor: '#007bff',
         padding: 0,
@@ -131,5 +146,24 @@ const styles = StyleSheet.create({
     forgotPassword: {
         color: '#007bff',
         textDecorationLine: 'underline',
+    },
+});
+
+const darkStyle = StyleSheet.create({
+    ...lightStyle,
+    statusbar: { color: "#154" },
+    headerStyle:{
+        backgroundColor: "#111",
+    },
+    text: { color: "#ddd" },
+    
+    container: {
+        ...lightStyle.container,
+        backgroundColor: "#222",
+    },
+    input :{
+        ...lightStyle.input,
+        backgroundColor: "#444",
+        color: "#fff",
     },
 });
