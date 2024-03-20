@@ -50,10 +50,12 @@ export default ({ loginhandler }) => {
                         headerRight: () => (<></>)
                     }}
                 />
-                <Image
-                    source={require("../../assets/images/logo.png")}
-                    style={styles.logo}
-                />
+                <View>
+                    <Image
+                        source={require("../../assets/images/logo.png")}
+                        style={styles.logo}
+                    />
+                </View>
                 <TextInput
                     style={styles.input}
                     placeholder="Username"
@@ -76,7 +78,7 @@ export default ({ loginhandler }) => {
 
                 <View style={{ overflow: 'hidden' }}>
                     <Pressable onPress={handleForgotPassword} android_ripple={androidRipple.dark}>
-                        <Text style={styles.forgotPassword}>Forgot Password?</Text>
+                        <Text style={styles.forgotPassword}>Forgot your password?</Text>
                     </Pressable>
                 </View>
             </View>
@@ -93,8 +95,8 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
     },
     logo: {
-        width: 150,
-        height: 150,
+        width: 50,
+        height: 50,
         marginBottom: 20,
     },
     input: {

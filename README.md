@@ -139,7 +139,7 @@ You can close the virtul device.
 
 Go to the android directory and run gradle commnad
 
-```
+```bash
 cd client
 cd android
 gradlew :app:bundleRelease
@@ -151,6 +151,7 @@ You need to download bundletools provided by android studio to pack your aab fil
 For this Example download the `.jar` file provided you in this [link](https://developer.android.com/tools/bundletool).
 
 Use this command to generate the apks
+
 ```bash
 
 # this is syntax
@@ -174,3 +175,21 @@ This required a device json file. If you dont have the device json for the devic
 ```bash
 java -jar bundletool-all-1.15.6.jar extract-apks --apks=E:/projects/react-natives/my-chat-app/client/android/app/build/outputs/bundle/release/my-chat-app.apks --output-dir=E:/projects/react-natives/my-chat-app/client/android/app/build/outputs/bundle/release --device-spec=E:/projects/react-natives/device.json
 ```
+
+
+## Other knows challenges I faced
+### I cannot make any request to different servers
+I was not able to make hit to my other server on my local machine i.e. `http://192.168.170.212:3081`. So I tried a secured website like `https://images.freeimages.com/images/large-previews/53d/leather-link-texture-1538412.jpg`. This also did not go well.
+
+To fix this we need to create a file name `network_security_config.xml` at `\android\app\src\main\res\xml\network_security_config.xml`. If it is already present then just edit the file.
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>
+```
+The `android` folder would have been created in your project directory already if you have run `npx expo run:android` command.
+
+Now we need to link this file to the `AndroidManifest.xml` file which is present at `\android\app\src\main\AndroidManifest.xml`.
+
+Rebuild the apk again and you are good to go.
