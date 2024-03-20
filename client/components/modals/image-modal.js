@@ -38,7 +38,7 @@ export default function ({ title, imageUrl, modalVisible, closeModal }) {
                     <View style={styles.header}>
                         <Text style={styles.title}>{title}</Text>
                         <TouchableOpacity onPress={closeModal} style={styles.btn}>
-                            <Text>❌</Text>
+                            <Image source={require("../../assets/images/close.png")} style={styles.imageBtn} />
                         </TouchableOpacity>
                     </View>
 
@@ -54,7 +54,7 @@ export default function ({ title, imageUrl, modalVisible, closeModal }) {
                     {/* Footer */}
                     <View style={styles.footer}>
                         <TouchableOpacity style={styles.btn} onPress={reloadImage}>
-                            <Text style={{fontSize: 24, paddingBottom: 5}}>↻</Text>
+                            <Image source={require("../../assets/images/reload.png")} style={styles.imageBtn} />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -111,9 +111,13 @@ const lightStyle = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#dedede',
         borderRadius: 5,
-        minWidth: 40,
-        minHeight: 40,
+        minWidth: 30,
+        minHeight: 30,
     },
+    imageBtn: {
+        width: 15,
+        height: 15,
+    }
 });
 
 const darkStyle = StyleSheet.create({

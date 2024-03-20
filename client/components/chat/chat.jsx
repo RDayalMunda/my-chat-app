@@ -172,13 +172,18 @@ export default function () {
                     placeholderTextColor={styles.placeholder.color}
                     multiline={true}
                 />
-                <View style={{justifyContent:"center"}}>
+                <View style={{justifyContent:"center", flexDirection: 'row'}}>
                     
+                    <Pressable 
+                        style={styles.btn}
+                    >
+                    <Image source={require("../../assets/images/paper-clip.png")} style={styles.imageBtn} />
+                    </Pressable>
                     <Pressable 
                         style={styles.btn}
                         onPress={sendMessage}
                     >
-                        <Text style={styles.textEmoji}>➤</Text>
+                        <Image source={require("../../assets/images/send.png")} style={styles.imageBtn} />
                     </Pressable>
                 </View>
             </View>
@@ -304,20 +309,30 @@ const lightStyle = StyleSheet.create({
     },
     input: {
         flex: 1,
-        marginRight: 10,
         borderWidth: 1,
         borderRadius: 5,
         paddingVertical: 5,
         paddingHorizontal: 10,
         maxHeight: Dimensions.get('window').height/5,
         borderColor: '#ccc',
+        marginHorizontal: 3,
     },
     placeholder: { color: "#777" },
+   
     btn: {
-        backgroundColor: "#bfe762",
-        // height: '100%',
-        // justifyContent: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
         borderRadius: 5,
+        minWidth: 30,
+        minHeight: 30,
+        marginHorizontal: 3,
+        backgroundColor: '#bbb',
+        padding: 10,
+    },
+    imageBtn: {
+        width: 20,
+        height: 20,
     },
     textEmoji: {
         fontSize: 24,

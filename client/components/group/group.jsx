@@ -77,7 +77,7 @@ export default function ({ loginhandler }) {
     }, [])
 
     return (
-        <ScrollView
+        <ScrollView style={styles.container}
         refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
         }
@@ -148,6 +148,9 @@ export default function ({ loginhandler }) {
 }
 
 const lightStyle = StyleSheet.create({
+    container: {
+        backgroundColor: "#eee"
+    },
     image: {
         width: 50,
         height: 50,
@@ -162,7 +165,6 @@ const lightStyle = StyleSheet.create({
         paddingHorizontal: 16,
         justifyContent: 'space-between',
         paddingVertical: 8,
-        backgroundColor: "#eee",
     },
     unseenContainer: {
         backgroundColor: "#3f5",
@@ -181,10 +183,8 @@ const lightStyle = StyleSheet.create({
 
 const darkStyle = StyleSheet.create({
     ...lightStyle,
-    
-    groupItem: {
-        ...lightStyle.groupItem,
-        backgroundColor: "#333",
+    container: {
+        backgroundColor: "#333"
     },
     text: {
         color: "#999"

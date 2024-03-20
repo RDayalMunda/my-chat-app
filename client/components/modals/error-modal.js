@@ -1,4 +1,4 @@
-import { Modal, View, Text, TouchableOpacity, StyleSheet, ScrollView } from "react-native"
+import { Modal, View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from "react-native"
 
 export default function ({ title, text, modalVisible, closeModal }) {
     return (
@@ -15,8 +15,8 @@ export default function ({ title, text, modalVisible, closeModal }) {
                 <View style={styles.modalContent}>
                     <View style={styles.header}>
                         <Text style={styles.title}>{title}</Text>
-                        <TouchableOpacity onPress={closeModal}>
-                            <Text style={styles.closeButton}>Close</Text>
+                        <TouchableOpacity onPress={closeModal} style={styles.btn}>
+                            <Image source={require("../../assets/images/reload.png")} style={styles.imageBtn} />
                         </TouchableOpacity>
                     </View>
 
@@ -78,4 +78,17 @@ const styles = StyleSheet.create({
         borderTopColor: '#ccc',
         paddingTop: 10,
     },
+    btn: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#dedede',
+        borderRadius: 5,
+        minWidth: 30,
+        minHeight: 30,
+    },
+    imageBtn: {
+        width: 15,
+        height: 15,
+    }
 });

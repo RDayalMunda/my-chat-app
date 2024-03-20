@@ -158,7 +158,7 @@ Use this command to generate the apks
 java -jar bundletool.jar build-apks --bundle=/path/to/your/app.aab --output=/path/to/output/app.apks --mode=universal
 
 # this is the actual command I used in my system
-java -jar bundletool-all-1.15.6.jar build-apks --bundle=E:/projects/react-natives/my-chat-app/client/android/app/build/outputs/bundle/release/app-release.aab --output=E:/projects/react-natives/my-chat-app/client/android/app/build/outputs/bundle/release/my-chat-app.apks --mode=universal
+java -jar bundletool-all-1.15.6.jar build-apks --bundle=E:/projects/react-natives/my-chat-app/client/android/app/build/outputs/bundle/release/app-release.aab --output=E:/projects/react-natives/my-chat-app.apks --mode=universal
 ```
 
 This command create bundle of apk files inside a single apk file
@@ -173,7 +173,7 @@ This required a device json file. If you dont have the device json for the devic
 }
 ```
 ```bash
-java -jar bundletool-all-1.15.6.jar extract-apks --apks=E:/projects/react-natives/my-chat-app/client/android/app/build/outputs/bundle/release/my-chat-app.apks --output-dir=E:/projects/react-natives/my-chat-app/client/android/app/build/outputs/bundle/release --device-spec=E:/projects/react-natives/device.json
+java -jar bundletool-all-1.15.6.jar extract-apks --apks=E:/projects/react-natives/my-chat-app.apks --output-dir=E:/projects/react-natives --device-spec=E:/projects/react-natives/device.json
 ```
 
 

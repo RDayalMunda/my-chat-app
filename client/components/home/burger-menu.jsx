@@ -106,7 +106,7 @@ export default function ({ loginhandler }) {
 
                             <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
                                 <Pressable style={styles.btn} onPress={()=>{ animateModal(-1000, true) }}>
-                                    <Text style={styles.textCenter}>X</Text>
+                                    <Image source={require("../../assets/images/close.png")} style={styles.imageBtn} />
                                 </Pressable>
                             </View>
                             <ScrollView style={styles.modalMainBody}>
@@ -126,8 +126,9 @@ export default function ({ loginhandler }) {
                             </ScrollView>
                             
                             <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-                                <Pressable style={ styles.btn } onPress={toLogout}>
-                                    <Text style={styles.textCenter}>Logout</Text>
+                                <Pressable style={ styles.logoutBtn } onPress={toLogout}>
+                                    <Text style={[styles.textCenter, { fontSize: 18 }]}>Logout</Text>
+                                    <Image source={require("../../assets/images/logout.png")} style={styles.imageBtn} />
                                 </Pressable>
                             </View>
                         </View>
@@ -165,8 +166,13 @@ const lightStyle = StyleSheet.create({
     },
     logoutBtn: {
         overflow: 'hidden',
-        backgroundColor: '#aaa',
-        padding: 5,
+        backgroundColor: '#f54',
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+        borderRadius: 5,
     },
     modalBackground: {
         flex: 1,
@@ -180,19 +186,24 @@ const lightStyle = StyleSheet.create({
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,
         padding: 20,
-        backgroundColor: '#ddd',
+        backgroundColor: '#eee',
     },
     modalContent: {
         height: "100%",
         justifyContent: 'space-between',
     },
     btn: {
-        backgroundColor: '#7e7e7e',
-        padding: 5,
-        paddingHorizontal: 20,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
         borderRadius: 5,
-        minHeight: 30,
         minWidth: 30,
+        minHeight: 30,
+        backgroundColor: '#bbb',
+    },
+    imageBtn: {
+        width: 20,
+        height: 20,
     },
     textCenter: {
         textAlign: 'center'
@@ -222,21 +233,12 @@ const darkStyle = StyleSheet.create({
         ...lightStyle.image,
         borderColor: '#eeeeee',
     },
-    logoutBtn: {
-        overflow: 'hidden',
-        backgroundColor: '#aaa',
-        padding: 5,
+    btn:{
+        ...lightStyle.btn,
+        backgroundColor: "#888"
     },
     animateBox: {
         ...lightStyle.animateBox,
         backgroundColor: '#333',
-    },
-    btn: {
-        backgroundColor: '#7e7e7e',
-        padding: 5,
-        paddingHorizontal: 20,
-        borderRadius: 5,
-        minHeight: 30,
-        minWidth: 30,
     },
 })
