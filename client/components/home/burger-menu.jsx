@@ -5,11 +5,14 @@ import { androidRipple } from "../../common/styles";
 import { logout } from "../../common/auth";
 import { getUserData } from "../../common/localstorage";
 import { IMAGE_URL } from "../../common/api";
+import ImageModal from "../modals/image-modal";
+import { memoiseInstance } from "../../common/utils";
 
 export default function ({ loginhandler }) {
     let [visible, setVisible] = useState(false)
     var [userData, setUserData] = useState({})
     const [slideAnim] = useState(new Animated.Value(-1000));
+    var [ modalData, setModalData ] = useState({ title: "", imageUrl: "", modalVisible: false})
     let colourScheme = useColorScheme()
 
     let styles = colourScheme=='dark'?darkStyle:lightStyle
@@ -36,6 +39,10 @@ export default function ({ loginhandler }) {
         await loginhandler()
     }
 
+    function closeModal(){
+        setModalData( oldData=>({ ...modalData, modalVisible: false }) )
+    }
+
     useEffect(() => {
 
 
@@ -51,6 +58,7 @@ export default function ({ loginhandler }) {
         getUserData().then(data => {
             userData = data
             setUserData(oldData => data)
+            setModalData( oldData=> ({ ...modalData, title: userData.name, imageUrl: userData.imageUrl }) )
         })
     }, [])
 
@@ -65,7 +73,7 @@ export default function ({ loginhandler }) {
                                 onPress={() => { setVisible(true) }}
                             >
                                 <Image
-                                    source={{ uri: `${IMAGE_URL}/${userData.imageUrl}` }}
+                                    source={{ uri: memoiseInstance( userData.imageUrl, ()=>(`${IMAGE_URL}/${userData.imageUrl}`) ) }}
                                     style={styles.image}
                                 />
                             </Pressable>
@@ -105,12 +113,13 @@ export default function ({ loginhandler }) {
                                 <View style={{ alignItems: 'center' }}>
                                     <Pressable
                                         android_ripple={androidRipple.light}
+                                        onPress={()=>{ setModalData( ()=>({ ...modalData, modalVisible: true }) ) }}
                                     >
                                         <Image
-                                            source={{ uri: `${IMAGE_URL}/${userData.imageUrl}` }}
+                                            source={{ uri: memoiseInstance( userData.imageUrl, ()=>(`${IMAGE_URL}/${userData.imageUrl}`) ) }}
                                             style={[styles.imageProfile ]}
                                         />
-                                        <Text style={styles.profileText}>{userData.name}</Text>
+                                        <Text style={[styles.profileText, styles.text]}>{userData.name}</Text>
                                     </Pressable>
                                 </View>
 
@@ -125,6 +134,13 @@ export default function ({ loginhandler }) {
                     </Animated.View>
                 </View>
             </Modal>
+
+            <ImageModal
+            title={modalData.title}
+            imageUrl={modalData.imageUrl}
+            modalVisible={modalData.modalVisible}
+            closeModal={closeModal}
+            />
         </View>
     )
 }
@@ -159,16 +175,16 @@ const lightStyle = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     animateBox: {
-        backgroundColor: '#fff',
         width: '80%',
         height: '100%',
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,
         padding: 20,
+        backgroundColor: '#ddd',
     },
     modalContent: {
         height: "100%",
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     btn: {
         backgroundColor: '#7e7e7e',
@@ -202,10 +218,6 @@ const darkStyle = StyleSheet.create({
         backgroundColor: "#111",
     },
     text: { color: "#eee" },
-    container: {
-        position: 'absolute',
-        zIndex: 10,
-    },
     image: {
         ...lightStyle.image,
         borderColor: '#eeeeee',
@@ -215,23 +227,9 @@ const darkStyle = StyleSheet.create({
         backgroundColor: '#aaa',
         padding: 5,
     },
-    modalBackground: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    },
     animateBox: {
-        backgroundColor: '#fff',
-        width: '80%',
-        height: '100%',
-        borderTopRightRadius: 10,
-        borderBottomRightRadius: 10,
-        padding: 20,
-    },
-    modalContent: {
-        height: "100%",
-        justifyContent: 'space-between'
+        ...lightStyle.animateBox,
+        backgroundColor: '#333',
     },
     btn: {
         backgroundColor: '#7e7e7e',
@@ -241,21 +239,4 @@ const darkStyle = StyleSheet.create({
         minHeight: 30,
         minWidth: 30,
     },
-    textCenter: {
-        textAlign: 'center'
-    },
-    modalMainBody: {
-        flexGrow: 1,
-    },
-    imageProfile: {
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        resizeMode: 'cover', // Adjust the image resizing mode as needed
-        marginTop: 20,
-    },
-    profileText: {
-        textAlign: 'center',
-        fontSize: 20,
-    }
 })

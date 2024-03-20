@@ -1,4 +1,4 @@
-import { Text, ScrollView, TouchableOpacity, View, SafeAreaView, Pressable, Image, StyleSheet, Dimensions, useColorScheme } from "react-native"
+import { Text, ScrollView, TouchableOpacity, View, SafeAreaView, Pressable, Image, StyleSheet, Dimensions, useColorScheme, RefreshControl } from "react-native"
 import { useRouter, Stack } from "expo-router"
 import { useEffect, useState } from "react"
 
@@ -7,6 +7,7 @@ import { androidRipple } from "../../common/styles"
 import { logout } from "../../common/auth"
 import { getUserData, storeInLocal } from "../../common/localstorage"
 import ImageModal from "../modals/image-modal"
+import { memoiseInstance } from "../../common/utils"
 
 export default function ({ loginhandler }) {
     let router = useRouter()
@@ -18,7 +19,15 @@ export default function ({ loginhandler }) {
         title: "",
         imageUrl: "",
     })
+    const [ refreshing, setRefreshing ] = useState(false)
     let styles = (useColorScheme()=='dark')?darkStyle:lightStyle
+
+    function onRefresh(){
+        setRefreshing(true)
+        setTimeout( ()=>{
+            setRefreshing(false)
+        }, 2000 )
+    }
 
     function navigateTo(path, query) {
         router.push({
@@ -68,7 +77,11 @@ export default function ({ loginhandler }) {
     }, [])
 
     return (
-        <ScrollView>
+        <ScrollView
+        refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
+        }
+        >
             <Stack.Screen
                 options={{
                     title: "My Chat App"
@@ -84,11 +97,20 @@ export default function ({ loginhandler }) {
 
                             <TouchableOpacity onPress={() => { setupModal(item) }} >
                                 <Image
-                                    source={{ uri: `${IMAGE_URL}/${!item?.isDirect?item.imageUrl:(
-                                        userData._id==item.participants[0]._id?
-                                        item.participants[1].imageUrl:
-                                        item.participants[0].imageUrl
-                                    )}` }}
+                                    source={{
+                                        uri: memoiseInstance(
+                                            !item?.isDirect?item.imageUrl:(
+                                                userData._id==item.participants[0]._id?
+                                                item.participants[1].imageUrl:
+                                                item.participants[0].imageUrl
+                                            ),
+                                            ()=>(`${IMAGE_URL}/${!item?.isDirect?item.imageUrl:(
+                                                userData._id==item.participants[0]._id?
+                                                item.participants[1].imageUrl:
+                                                item.participants[0].imageUrl
+                                            )}` )
+                                        )
+                                    }}
                                     style={styles.image}
                                 />
                             </TouchableOpacity>

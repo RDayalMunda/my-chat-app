@@ -212,3 +212,6 @@ Go inside `\android\app\src\main\res` folder. You will find folder named `mipmap
 Just replace them with your images make sure that the name are not changed. There should be a `ic_launcher.png` and `ic_launcher_round.png` file in each of the above mentioned folders.
 
 After this you can build your app again.
+
+## Want to change your app's name?
+To change you app name, the name that is displayed on the app drawer. You have to edit this file, `\android\app\src\main\res\values\strings.xml`.

@@ -10,7 +10,7 @@
     "plugins": [
       "expo-router"
     ],
-    "name": "mychatapp",
+    "name": "My Chat App",
     "slug": "client",
     "extra": {
       "router": {

@@ -52,11 +52,6 @@ module.exports = [
         "isDirect": true,
     },
     {
-        "_id": "65f65f79d2b94e847543c425",
-        "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c43e"  ],
-        "isDirect": true,
-    },
-    {
         "_id": "65f65f79d2b94e847543c426",
         "participants": [ "65f65f79d2b94e847543c44e", "65f65f79d2b94e847543c43f"  ],
         "isDirect": true,

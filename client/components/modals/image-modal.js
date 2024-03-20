@@ -1,9 +1,11 @@
-import { Modal, View, Text, TouchableOpacity, Image, StyleSheet } from "react-native"
+import { Modal, View, Text, TouchableOpacity, Image, StyleSheet, useColorScheme } from "react-native"
 import { IMAGE_URL } from "../../common/api";
 import { memoiseInstance } from "../../common/utils";
 import { useEffect, useState } from "react";
 
 export default function ({ title, imageUrl, modalVisible, closeModal }) {
+
+    const styles = (useColorScheme()=='dark')?darkStyle:lightStyle;
 
     let [ imageLink, setImageLink ] = useState(`${IMAGE_URL}/${imageUrl}`)
 
@@ -61,7 +63,8 @@ export default function ({ title, imageUrl, modalVisible, closeModal }) {
         </Modal>
     )
 }
-const styles = StyleSheet.create({
+const lightStyle = StyleSheet.create({
+    text: { color: "#111" },
     modalBackground: {
         flex: 1,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
@@ -112,3 +115,12 @@ const styles = StyleSheet.create({
         minHeight: 40,
     },
 });
+
+const darkStyle = StyleSheet.create({
+    ...lightStyle,
+    text: { color: "#eee" },
+    modalContent:{
+        ...lightStyle.modalContent,
+        backgroundColor: "#333",
+    },
+})
