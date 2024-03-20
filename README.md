@@ -190,6 +190,17 @@ To fix this we need to create a file name `network_security_config.xml` at `\and
 ```
 The `android` folder would have been created in your project directory already if you have run `npx expo run:android` command.
 
-Now we need to link this file to the `AndroidManifest.xml` file which is present at `\android\app\src\main\AndroidManifest.xml`.
+Now we need to link this file to the `AndroidManifest.xml` file which is present at `\android\app\src\main\AndroidManifest.xml`. Find the application tag inside this file and add thhis attribute at the end `android:networkSecurityConfig="@xml/network_security_config"`.
+```xml
+...
+
+  <application ...
+  android:networkSecurityConfig="@xml/network_security_config"
+  >
+  ...
+  </application>
+
+...
+```
 
 Rebuild the apk again and you are good to go.
