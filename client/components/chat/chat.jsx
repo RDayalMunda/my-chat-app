@@ -1,4 +1,4 @@
-import { Stack, useLocalSearchParams } from "expo-router"
+import { Stack, useLocalSearchParams, useRouter } from "expo-router"
 import { useEffect, useRef, useState } from "react"
 import { Text, Image, View, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, TextInput, Pressable, Dimensions, useColorScheme } from "react-native"
 import api, { IMAGE_URL } from "../../common/api"
@@ -8,6 +8,7 @@ import { memoiseInstance } from "../../common/utils"
 
 
 export default function () {
+    const router = useRouter()
     const params = useLocalSearchParams()
     const styles = (useColorScheme()=='dark')?darkStyle:lightStyle
 
@@ -68,6 +69,13 @@ export default function () {
         }
     }
 
+    function openGroupDetails(){
+        router.push({
+            pathname: "/group",
+            params: { groupId: params.groupId }
+        })
+    }
+
 
     useEffect(() => {
         getUserData().then( async data => {
@@ -78,7 +86,16 @@ export default function () {
             
             let groupData = await getGroupById(params.groupId)
             if (groupData) {
-                setGroupData(groupData)
+                if (groupData.isDirect){
+                    
+                    if (groupData.participants?.length==1){
+                        groupData = groupData.participants[0]
+                        groupData.name += ' (You)'
+                    }else {
+                        groupData = groupData.participants[0]._id==userData._id?groupData.participants[1]:groupData.participants[0]
+                    }
+                }
+                setGroupData(old=>groupData)
             } else {
                 console.log('send api')
             }
@@ -86,9 +103,7 @@ export default function () {
             if (!groupData.isDirect){
                 setModalData({ title: groupData.name, imageUrl: groupData.imageUrl })
             }else{
-                let user = groupData.participants[0]._id == userData._id?groupData.participants[1]:groupData.participants[0]
-                setGroupData( oldData=>({ ...oldData, name: user.name, imageUrl: user.imageUrl }) )
-                setModalData({ title: user.name, imageUrl: user.imageUrl })
+                setModalData({ title: data.name, imageUrl: data.imageUrl })
             }
 
             let messages = await getMessagesByGroupId(params.groupId)
@@ -120,7 +135,7 @@ export default function () {
                 options={{
                     title: groupData.name,
                     headerLeft: () => (
-                        <TouchableOpacity onPress={() => { setModalVisible(true) }}>
+                        <TouchableOpacity onPress={openGroupDetails}>
                             <Image
                                 source={{ uri: memoiseInstance(groupData.imageUrl, ()=>(`${IMAGE_URL}/${groupData.imageUrl}`)) }}
                                 style={styles.headerImage}
@@ -221,7 +236,7 @@ const lightStyle = StyleSheet.create({
 
     container: {
         flex: 1,
-        backgroundColor: '#ddd',
+        backgroundColor: '#9ba',
     },
     scrollArea: {
         flexGrow: 1,

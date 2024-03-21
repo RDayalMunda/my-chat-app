@@ -4,15 +4,15 @@ const model = require("../model/index.js");
 
 const seedsList = [
     {
+        name: "User",
+        set: require("./user.js"),
+        clear: true,
+    },
+    {
         name: "Group", // modelname
         set: require("./group.js"),
         clear: true,
     },
-    {
-        name: "User",
-        set: require("./user.js"),
-        clear: true,
-    }
 ]
 
 mongoose.connect(MDB.URL).then(async (err) => {

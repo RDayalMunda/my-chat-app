@@ -179,7 +179,7 @@ java -jar bundletool-all-1.15.6.jar extract-apks --apks=E:/projects/react-native
 
 ## Other knows challenges I faced
 ### I cannot make any request to different servers
-I was not able to make hit to my other server on my local machine i.e. `http://192.168.170.212:3081`. So I tried a secured website like `https://images.freeimages.com/images/large-previews/53d/leather-link-texture-1538412.jpg`. This also did not go well.
+I was not able to make hit to my other server on my local machine i.e. `http://192.168.82.212:3081`. So I tried a secured website like `https://images.freeimages.com/images/large-previews/53d/leather-link-texture-1538412.jpg`. This also did not go well.
 
 To fix this we need to create a file name `network_security_config.xml` at `\android\app\src\main\res\xml\network_security_config.xml`. If it is already present then just edit the file.
 ```xml

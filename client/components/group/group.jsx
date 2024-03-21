@@ -58,7 +58,8 @@ export default function ({ loginhandler }) {
         if (!data.isDirect){
             setModalData({ title: data.name, imageUrl: data.imageUrl })
         } else {
-            let user = data.participants[0]._id == userData._id?data.participants[1]:data.participants[0]
+            let user = data.participants?.length==1?(data.participants[0]):data.participants[0]._id == userData._id?data.participants[1]:data.participants[0]
+            console.log('user', user)
             setModalData({ title: user.name, imageUrl: user.imageUrl })
         }
         setModalVisible(true)
@@ -101,10 +102,12 @@ export default function ({ loginhandler }) {
                                         uri: memoiseInstance(
                                             !item?.isDirect?item.imageUrl:(
                                                 userData._id==item.participants[0]._id?
+                                                item.participants?.length==1?(item.participants[0].imageUrl):
                                                 item.participants[1].imageUrl:
                                                 item.participants[0].imageUrl
                                             ),
                                             ()=>(`${IMAGE_URL}/${!item?.isDirect?item.imageUrl:(
+                                                item.participants?.length==1?(item.participants[0].imageUrl):
                                                 userData._id==item.participants[0]._id?
                                                 item.participants[1].imageUrl:
                                                 item.participants[0].imageUrl
@@ -122,6 +125,7 @@ export default function ({ loginhandler }) {
                                 } ]}
                             >{
                                 !item?.isDirect?item.name:(
+                                    item.participants?.length==1?(item.participants[0].name + ' (You)'):
                                     userData._id==item.participants[0]._id?
                                     item.participants[1].name:
                                     item.participants[0].name
