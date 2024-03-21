@@ -8,23 +8,31 @@ import { IMAGE_URL } from "../../common/api";
 
 export default function () {
     let params = useLocalSearchParams()
-    const styles = (useColorScheme() == 'dark') ? darkStyle : lighStyle;
+    const styles = (useColorScheme() == 'dark') ? darkStyle : lightStyle;
     let [groupData, setGroupData] = useState({
-        name: "no-name"
+        name: "no-name",
+        canChangeImage: false
     })
     const [errorModal, setErrorModal] = useState({ text: "", title: "Error", modalVisible: false })
     const closeErrorModal = () => { setErrorModal(oldData => ({ ...oldData, modalVisible: false })) }
 
     useEffect(() => {
         getUserData().then((udata) => {
-            console.log('udata', udata)
             getGroupById(params.groupId).then((gData) => {
-                console.log('grop', gData)
-                setGroupData( oldData=> ( !gData.isDirect?gData:
-                    gData.participants?.length==1?gData.participants[0]:
-                    (gData.participants[0]._id==udata._id)?gData.participants[1]:
-                    gData.participants[0] )
-                )
+                let canChangeImage = !gData.isDirect ? true :
+                    (gData.participants?.length == 1 && gData.participants[0]._id == udata._id) ? true :
+                        false;
+                let isDirect = gData.isDirect
+
+                groupData = !gData.isDirect ? gData :
+                    gData.participants?.length == 1 ? gData.participants[0] :
+                        (gData.participants[0]._id == udata._id) ? gData.participants[1] :
+                            gData.participants[0];
+
+                groupData.canChangeImage = canChangeImage;
+                groupData.isDirect = isDirect
+
+                setGroupData(oldData => groupData)
             }).catch((err) => {
                 setErrorModal(oldData => ({ ...oldData, modalVisible: true, text: JSON.stringify(err) }))
             })
@@ -33,7 +41,7 @@ export default function () {
         })
     }, [])
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <Stack.Screen
                 options={{
                     headerTitle: () => (<Text style={styles.headerTitle}>{groupData?.name}</Text>),
@@ -45,29 +53,44 @@ export default function () {
             />
             <ScrollView>
                 <View>
-                    <Image style={styles.profileImage} source={{uri: memoiseInstance( groupData.imageUrl, ()=>( `${IMAGE_URL}/${groupData.imageUrl}` ) )}} />
+                    <Image style={styles.profileImage} source={{ uri: memoiseInstance(groupData.imageUrl, () => (`${IMAGE_URL}/${groupData.imageUrl}`)) }} />
                 </View>
-                <View style={styles.btnGroup}>
-                    <TouchableOpacity style={styles.btn}>
-                        <Image style={styles.imageBtn} source={require("../../assets/images/eye.png")} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.btn}>
-                        <Image style={styles.imageBtn} source={require("../../assets/images/upload.png")} />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.btn}>
-                        <Image style={styles.imageBtn} source={require("../../assets/images/trash.png")} />
-                    </TouchableOpacity>
-                </View>
-                { groupData?.participants?.length?(
-                    <View>
-                        <Text style={[styles.headingText]}>Participants List</Text>
-                        { groupData?.participants?.map( group=>(
-                            <TouchableOpacity key={group._id}>
-                                <Text>{group.name}</Text>
-                            </TouchableOpacity>
-                        ) ) }
+                {groupData.canChangeImage ? (
+                    <View style={styles.btnGroup}>
+                        <TouchableOpacity style={styles.btn}>
+                            <Image style={styles.imageBtn} source={require("../../assets/images/eye.png")} />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.btn}>
+                            <Image style={styles.imageBtn} source={require("../../assets/images/upload.png")} />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.btn}>
+                            <Image style={styles.imageBtn} source={require("../../assets/images/trash.png")} />
+                        </TouchableOpacity>
                     </View>
-                ):(<></>) }
+                ) : (<></>)}
+                {groupData?.participants?.length ? (
+                    <View>
+                        <Text style={[styles.text, styles.headingText]}>Participants</Text>
+                        <View style={{alignItems: 'center'}}>
+
+                            <View style={styles.participantsContainer}>
+                                {groupData?.participants?.map(user => (
+                                    <TouchableOpacity key={user._id} style={styles.participantsBtn}>
+                                        <Text style={styles.textBtn}>{user.name}</Text>
+                                    </TouchableOpacity>
+                                ))}
+                            </View>
+                        </View>
+                    </View>
+                ) : (<></>)}
+                {!groupData.isDirect ? (
+                    <View style={styles.btnGroup}>
+                        <TouchableOpacity style={styles.btn}>
+                            <Text style={styles.textBtn}>Leave Group</Text>
+                            <Image style={styles.imageBtn} source={require("../../assets/images/exit.png")} />
+                        </TouchableOpacity>
+                    </View>
+                ) : (<></>)}
             </ScrollView>
             <ErrorModal
                 title={errorModal.title}
@@ -79,7 +102,7 @@ export default function () {
     )
 }
 
-const lighStyle = StyleSheet.create({
+const lightStyle = StyleSheet.create({
     headerTitle: {
         fontSize: 18,
         paddingLeft: 10,
@@ -90,6 +113,10 @@ const lighStyle = StyleSheet.create({
         backgroundColor: "#ddd",
     },
     text: { color: "#111" },
+    container: {
+        flex: 1,
+        backgroundColor: '#222',
+    },
     profileImage: {
         maxHeight: 200,
         height: 200,
@@ -106,23 +133,52 @@ const lighStyle = StyleSheet.create({
         minHeight: 30,
         marginHorizontal: 3,
     },
-    btnGroup:{
+    btnGroup: {
         justifyContent: 'center',
         flexDirection: 'row',
     },
     imageBtn: {
         width: 15,
         height: 15,
+        marginHorizontal: 3,
     },
-
+    textBtn: {
+        marginHorizontal: 5,
+        textAlign: 'center',
+    },
     headingText: {
-        textAlign:"center",
+        marginTop: 10,
+        textAlign: "center",
         fontSize: 20,
-        paddingVertical: 5,
-    }
+    },
+    participantsContainer: {
+        paddingBottom: 10,
+        paddingHorizontal: 10,
+        width: '50%',
+        justifyContent: 'center',
+        flexDirection: 'column'
+    },
+    participantsBtn: {
+        fontSize: 16,
+        marginVertical: 3,
+        borderRadius: 5,
+        backgroundColor: '#79a',
+    },
 
 })
 
 const darkStyle = StyleSheet.create({
-    ...lighStyle,
+    ...lightStyle,
+    headerStyle: {
+        backgroundColor: "#111",
+    },
+    text: { color: "#ddd" },
+    headerTitle: {
+        ...lightStyle.headerTitle,
+        color: "#ddd"
+    },
+    container: {
+        ...lightStyle.container,
+        backgroundColor: '#222',
+    },
 })

@@ -19,14 +19,14 @@ export default function ({ loginhandler }) {
         title: "",
         imageUrl: "",
     })
-    const [ refreshing, setRefreshing ] = useState(false)
-    let styles = (useColorScheme()=='dark')?darkStyle:lightStyle
+    const [refreshing, setRefreshing] = useState(false)
+    let styles = (useColorScheme() == 'dark') ? darkStyle : lightStyle
 
-    function onRefresh(){
+    function onRefresh() {
         setRefreshing(true)
-        setTimeout( ()=>{
+        setTimeout(() => {
             setRefreshing(false)
-        }, 2000 )
+        }, 2000)
     }
 
     function navigateTo(path, query) {
@@ -38,7 +38,7 @@ export default function ({ loginhandler }) {
 
     async function getGroupList() {
         try {
-            let res = await api.get("/group/list", { headers: { userId: userData._id }});
+            let res = await api.get("/group/list", { headers: { userId: userData._id } });
             if (res.data.success) {
                 storeInLocal('group-list', res.data.groupList)
                 groupList = res.data.groupList
@@ -55,10 +55,10 @@ export default function ({ loginhandler }) {
     }
 
     const setupModal = (data) => {
-        if (!data.isDirect){
+        if (!data.isDirect) {
             setModalData({ title: data.name, imageUrl: data.imageUrl })
         } else {
-            let user = data.participants?.length==1?(data.participants[0]):data.participants[0]._id == userData._id?data.participants[1]:data.participants[0]
+            let user = data.participants?.length == 1 ? (data.participants[0]) : data.participants[0]._id == userData._id ? data.participants[1] : data.participants[0]
             console.log('user', user)
             setModalData({ title: user.name, imageUrl: user.imageUrl })
         }
@@ -70,18 +70,18 @@ export default function ({ loginhandler }) {
     };
 
     useEffect(() => {
-        getUserData().then(data=>{
+        getUserData().then(data => {
             userData = data
-            setUserData(oldData=>data)
+            setUserData(oldData => data)
             getGroupList()
-        }).catch( (err)=>{ console.log(err) } )
+        }).catch((err) => { console.log(err) })
     }, [])
 
     return (
         <ScrollView style={styles.container}
-        refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>
-        }
+            refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
         >
             <Stack.Screen
                 options={{
@@ -97,46 +97,48 @@ export default function ({ loginhandler }) {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
 
                             <TouchableOpacity onPress={() => { setupModal(item) }} >
-                                <Image
-                                    source={{
-                                        uri: memoiseInstance(
-                                            !item?.isDirect?item.imageUrl:(
-                                                userData._id==item.participants[0]._id?
-                                                item.participants?.length==1?(item.participants[0].imageUrl):
-                                                item.participants[1].imageUrl:
-                                                item.participants[0].imageUrl
-                                            ),
-                                            ()=>(`${IMAGE_URL}/${!item?.isDirect?item.imageUrl:(
-                                                item.participants?.length==1?(item.participants[0].imageUrl):
-                                                userData._id==item.participants[0]._id?
-                                                item.participants[1].imageUrl:
-                                                item.participants[0].imageUrl
-                                            )}` )
-                                        )
-                                    }}
-                                    style={styles.image}
-                                />
+                                <View style={styles.imageWrapper}>
+                                    <Image
+                                        source={{
+                                            uri: memoiseInstance(
+                                                !item?.isDirect ? item.imageUrl : (
+                                                    userData._id == item.participants[0]._id ?
+                                                        item.participants?.length == 1 ? (item.participants[0].imageUrl) :
+                                                            item.participants[1].imageUrl :
+                                                        item.participants[0].imageUrl
+                                                ),
+                                                () => (`${IMAGE_URL}/${!item?.isDirect ? item.imageUrl : (
+                                                    item.participants?.length == 1 ? (item.participants[0].imageUrl) :
+                                                        userData._id == item.participants[0]._id ?
+                                                            item.participants[1].imageUrl :
+                                                            item.participants[0].imageUrl
+                                                )}`)
+                                            )
+                                        }}
+                                        style={styles.image}
+                                    />
+                                </View>
                             </TouchableOpacity>
-                            
+
                             <Text
-                                style={[ styles.text, {
+                                style={[styles.text, {
                                     fontSize: 15,
                                     paddingLeft: 15,
-                                } ]}
+                                }]}
                             >{
-                                !item?.isDirect?item.name:(
-                                    item.participants?.length==1?(item.participants[0].name + ' (You)'):
-                                    userData._id==item.participants[0]._id?
-                                    item.participants[1].name:
-                                    item.participants[0].name
-                                )
-                            }</Text>
+                                    !item?.isDirect ? item.name : (
+                                        item.participants?.length == 1 ? (item.participants[0].name + ' (You)') :
+                                            userData._id == item.participants[0]._id ?
+                                                item.participants[1].name :
+                                                item.participants[0].name
+                                    )
+                                }</Text>
                         </View>
-                        {item?.unseenCount?(
-                        <View style={styles.unseenContainer}>
-                            <Text style={[styles.unseenCount, styles.text]}>{item.unseenCount}</Text>
-                        </View>
-                        ):<></>}
+                        {item?.unseenCount ? (
+                            <View style={styles.unseenContainer}>
+                                <Text style={[styles.unseenCount, styles.text]}>{item.unseenCount}</Text>
+                            </View>
+                        ) : <></>}
                     </TouchableOpacity>
                 ))}
 
@@ -154,6 +156,12 @@ export default function ({ loginhandler }) {
 const lightStyle = StyleSheet.create({
     container: {
         backgroundColor: "#eee"
+    },
+    imageWrapper: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+        overflow: 'hidden'
     },
     image: {
         width: 50,
