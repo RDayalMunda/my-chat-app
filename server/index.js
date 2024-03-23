@@ -11,6 +11,11 @@ app.use( (req, res, next)=>{
     next()
 } )
 
+app.use( "/api", (req, res)=>{
+    console.log('caching api')
+    res.status(401).json({ message: "test 401" })
+} )
+
 require("./controller/socket.js")
 
 app.use(express.json())
