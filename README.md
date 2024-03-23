@@ -77,6 +77,7 @@ In the server folder create a `config.js` file.
 module.exports.PORT = 3000;
 module.exports.CLIENT_PORT = 3081;
 module.exports.LOCALHOST = "http://192.168.123.456"
+module.exports.SOCKET_URL = "http://192.168.123.456:3081";
 module.exports.MDB = {
     URL: "mongodb://127.0.0.1:27017/mychatapp"
 }
