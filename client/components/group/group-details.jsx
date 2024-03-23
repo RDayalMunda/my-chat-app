@@ -115,7 +115,7 @@ const lightStyle = StyleSheet.create({
     text: { color: "#111" },
     container: {
         flex: 1,
-        backgroundColor: '#222',
+        backgroundColor: '#eee',
     },
     profileImage: {
         maxHeight: 200,

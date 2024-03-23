@@ -1,13 +1,13 @@
-import { Text, ScrollView, TouchableOpacity, View, SafeAreaView, Pressable, Image, StyleSheet, Dimensions, useColorScheme, RefreshControl } from "react-native"
+import { Text, ScrollView, TouchableOpacity, View, SafeAreaView, Image, StyleSheet, useColorScheme, RefreshControl } from "react-native"
 import { useRouter, Stack } from "expo-router"
 import { useEffect, useState } from "react"
 
 import api, { IMAGE_URL } from "../../common/api"
-import { androidRipple } from "../../common/styles"
 import { logout } from "../../common/auth"
-import { getUserData, storeInLocal } from "../../common/localstorage"
+import { getFromLocal, getUserData, storeInLocal } from "../../common/localstorage"
 import ImageModal from "../modals/image-modal"
 import { memoiseInstance } from "../../common/utils"
+import { showToast } from "../../common/toast"
 
 export default function ({ loginhandler }) {
     let router = useRouter()
@@ -41,17 +41,17 @@ export default function ({ loginhandler }) {
             let res = await api.get("/group/list", { headers: { userId: userData._id } });
             if (res.data.success) {
                 storeInLocal('group-list', res.data.groupList)
-                groupList = res.data.groupList
-                setGroupList(groupList)
+                setGroupList(old => res.data.groupList)
             }
         } catch (err) {
             console.log(err)
+            showToast("Server Error! Loading Offline data")
+            getFromLocal('group-list').then((list) => {
+                if (list?.length) setGroupList(old => list)
+            }).catch(err => {
+                console.log(err)
+            })
         }
-    }
-
-    async function toLogout() {
-        await logout()
-        await loginhandler()
     }
 
     const setupModal = (data) => {
@@ -155,7 +155,7 @@ export default function ({ loginhandler }) {
 
 const lightStyle = StyleSheet.create({
     container: {
-        backgroundColor: "#eee"
+        backgroundColor: "#ddd"
     },
     imageWrapper: {
         width: 50,

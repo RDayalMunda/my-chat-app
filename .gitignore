@@ -1,3 +1,6 @@
+/images/
+/ecosystem.config.js
+
 client/node_modules/
 client/.expo/
 client/android/
@@ -5,7 +8,6 @@ client/android/
 server/node_modules/
 server/config.js
 
-/images/
 
 socket/node_modules/
 socket/config.js

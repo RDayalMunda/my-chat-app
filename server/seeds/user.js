@@ -10,7 +10,7 @@ module.exports = [
         "_id": "65f65f79d2b94e847543c435",
         "name": "Nicole",
         "userName": "nicole",
-        "imageUrl": "b22113aa-955b-4e01-846b-da469cdd1a97.jpeg",
+        "imageUrl": "564e7d5d-97f5-4794-bd75-a7803f82f5bc-u1.jfif",
         "password": "$2b$10$xK3WiUXi7hdGdrgs.6AlIuxPQTJD9EFKSkCfLUSEf3tJqZCln75jG",
     },
     {
@@ -24,7 +24,7 @@ module.exports = [
         "_id": "65f65f79d2b94e847543c437",
         "name": "Rose",
         "userName": "rose",
-        "imageUrl": "f9a01345-187b-4219-b043-7a86f6562152.jpeg",
+        "imageUrl": "acf770ab-3e73-4f3c-ad6d-85d87790446d-u1.jfif",
         "password": "$2b$10$xK3WiUXi7hdGdrgs.6AlIuxPQTJD9EFKSkCfLUSEf3tJqZCln75jG",
     },
     {
@@ -38,7 +38,7 @@ module.exports = [
         "_id": "65f65f79d2b94e847543c439",
         "name": "Liz",
         "userName": "lizjizzqueen",
-        "imageUrl": "ec641983-721e-41e5-b153-b2f1f783fa82.jpeg",
+        "imageUrl": "0961a374-397d-4101-83a5-4deb752b8e1c-u1.jfif",
         "password": "$2b$10$xK3WiUXi7hdGdrgs.6AlIuxPQTJD9EFKSkCfLUSEf3tJqZCln75jG",
     },
     {
@@ -66,7 +66,7 @@ module.exports = [
         "_id": "65f65f79d2b94e8475434009",
         "name": "Susana",
         "userName": "susana",
-        "imageUrl": "1c860df3-3fbd-4eb1-be18-075096ed242d-u1.jpeg",
+        "imageUrl": "ca694713-3880-4aca-a7ad-dde787ee5bc3-u1.jfif",
         "password": "$2b$10$xK3WiUXi7hdGdrgs.6AlIuxPQTJD9EFKSkCfLUSEf3tJqZCln75jG",
     },
     {
