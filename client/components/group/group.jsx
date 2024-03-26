@@ -7,7 +7,6 @@ import { logout } from "../../common/auth"
 import { getFromLocal, getUserData, storeInLocal } from "../../common/localstorage"
 import ImageModal from "../modals/image-modal"
 import { memoiseInstance } from "../../common/utils"
-import { showToast } from "../../common/toast"
 
 export default function ({ loginhandler }) {
     let router = useRouter()
@@ -45,7 +44,6 @@ export default function ({ loginhandler }) {
             }
         } catch (err) {
             console.log(err)
-            showToast("Server Error! Loading Offline data")
             getFromLocal('group-list').then((list) => {
                 if (list?.length) setGroupList(old => list)
             }).catch(err => {

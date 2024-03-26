@@ -1,17 +1,16 @@
 const express = require("express")
 const CONFIG = require("./config.js")
 const mongoose = require("mongoose")
+const cors = require('cors')
 
 const app = express()
-const cors = require('cors')
-app.use(cors())
 
 app.use( (req, res, next)=>{
-    console.log('server reached')
+    console.log('server reached')    
+    res.setHeader("Access-Control-Allow-Headers", "*")
     next()
 } )
 
-require("./controller/socket.js")
 
 app.use(express.json())
 
@@ -21,6 +20,7 @@ app.use("/chat", require("./router/chat.js"))
 
 app.listen(CONFIG.PORT, () => {
     console.log(`chat app running on ${CONFIG.LOCALHOST}:${CONFIG.PORT}`)
+    require("./controller/socket.js")
     mongoose.connect(CONFIG.MDB.URL).then(() => {
         console.log('MDB connected')
     }).catch(err => {
