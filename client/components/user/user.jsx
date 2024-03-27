@@ -40,26 +40,42 @@ export default function () {
         if (!user?.name) {
             isError = true
             setError(oldErr => ({ ...oldErr, name: "Please Enter your full name" }))
+        }else{
+            setError(oldErr => ({ ...oldErr, name: "" }))
         }
         if (!user?.userName) {
             isError = true
             setError(oldErr => ({ ...oldErr, userName: "Please provide a unique username" }))
+        }else {
+            setError(oldErr => ({ ...oldErr, userName: "" }))
         }
         if (!user?.email) {
             isError = true
             setError(oldErr => ({ ...oldErr, email: "Please enter an email" }))
         }
+        else if ( !/[a-zA-Z0-9._+%-]+@[a-zA-Z0-9._+%-]+\.[a-zA-Z]{2,}$/.test(user.email)){
+            isError = true
+            setError(oldErr=>({ ...oldErr, email: "Please enter a valid email" }))
+        }else {
+            setError( oldErr=>({ ...oldErr, email: "" }) )
+        }
         if (!user?.password) {
             isError = true
             setError(oldErr => ({ ...oldErr, password: "Please enter a password" }))
+        }else{
+            setError(oldErr => ({ ...oldErr, password: "" }))
         }
         if (!user?.confirmPassword) {
             isError = true
             setError(oldErr => ({ ...oldErr, confirmPassword: "Please confirm your password" }))
+        }else {
+            setError(oldErr => ({ ...oldErr, confirmPassword: "" }))
         }
         if (user?.password && user?.confirmPassword && user?.password != user?.confirmPassword) {
             isError = true
             setError(oldErr => ({ ...oldErr, password: "Your password is not confirmed! Please try again" }))
+        }else{
+            setError(oldErr => ({ ...oldErr, password: "" }))
         }
         return isError
     }
@@ -69,7 +85,10 @@ export default function () {
         if (inProgress) return
         setInProgress(()=>(true))
         let isError = validateFields()
-        if (isError) return
+        if (isError){
+            setInProgress(()=>(false))
+            return
+        }
         user.name = user.name.trim()
         user.userName = user.userName.trim()
         user.email = user.email.trim()
