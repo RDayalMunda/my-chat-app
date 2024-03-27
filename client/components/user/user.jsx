@@ -1,4 +1,4 @@
-import { Stack, useLocalSearchParams } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, useColorScheme } from "react-native"
 import api from "../../common/api";
@@ -7,95 +7,90 @@ import { Debounce } from "../../common/utils";
 let debouncedCheckUserName = null; // need to define it ourside of component to avoid redefining it on every render
 
 export default function () {
+    const router = useRouter()
+    const [inProgress, setInProgress] = useState(false)
     const styles = (useColorScheme() == 'dark') ? darkStyle : lightStyle;
-    const params = useLocalSearchParams()
-    const [user, modifyUser] = useState({
-        // _id: null,
-        name: "",
-        userName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        imageUrl: "",
-    })
-    const [ error, setError ] = useState({
-        name: "",
-        userName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-    })
-    const [ showPassword, setShowPassword ] = useState(false)
-    const refList = [ useRef(), useRef(), useRef(), useRef(), useRef() ]
+    const [user, modifyUser] = useState({ name: "", userName: "", email: "", password: "", confirmPassword: "" })
+    const [error, setError] = useState({ name: "", userName: "", email: "", password: "", confirmPassword: "" })
+    const [showPassword, setShowPassword] = useState(false)
+    const refList = { name: useRef(), userName: useRef(), email: useRef(), password: useRef(), confirmPassword: useRef() }
 
-    const [ showConfirmPassword, setShowConfirmPassword ] = useState(false)
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
-    const handleFocus = function(index){
-        if (refList[index+1]?.current?.focus){
-            refList[index+1].current.focus()
-        }else if(refList[index.current?.blur]){
-            refList[index].current.blur()
-        }
+    const handleFocus = function (elem, nextElem) {
+        console.log('handle focus', elem, nextElem)
+        if (refList[nextElem]?.current?.focus) refList[nextElem].current.focus()
+        else if ( refList[elem]?.current?.blur ) refList[elem].current.blur() 
     }
 
-    const handleInput = function(newText){
-        
-    }
 
-    const checkUserName = function(userName, userId){
-        api.get("/user/unique", { params: { userName: userName, ...(userId?{ _id: userId }:{}) } }).then( ({data})=>{
+    const checkUserName = function (userName, userId) {
+        if (inProgress) return
+        api.get("/user/unique", { params: { userName: userName, ...(userId ? { _id: userId } : {}) } }).then(({ data }) => {
             console.log('got unique', userName, data)
-        } ).catch( err=>{ console.log(err) } )
+        }).catch(err => { console.log(err) })
     }
-    
-    useEffect( ()=>{
-        debouncedCheckUserName = Debounce(checkUserName)
-    }, [] )
 
-    const validateFields = function(){
+    useEffect(() => {
+        debouncedCheckUserName = Debounce(checkUserName)
+    }, [])
+
+    const validateFields = function () {
         let isError = false
-        if (!user?.name){
+        if (!user?.name) {
             isError = true
-            setError( oldErr=>({ ...oldErr, name: "Please Enter your full name" }) )
+            setError(oldErr => ({ ...oldErr, name: "Please Enter your full name" }))
         }
-        if (!user?.userName){
+        if (!user?.userName) {
             isError = true
-            setError( oldErr=>({ ...oldErr, userName: "Please provide a unique username" }) )
+            setError(oldErr => ({ ...oldErr, userName: "Please provide a unique username" }))
         }
-        if (!user?.email){
+        if (!user?.email) {
             isError = true
-            setError( oldErr=>({ ...oldErr, email: "Please enter an email" }) )
+            setError(oldErr => ({ ...oldErr, email: "Please enter an email" }))
         }
-        if (!user?.password){
+        if (!user?.password) {
             isError = true
-            setError( oldErr=>({ ...oldErr, password: "Please enter a password" }) )
+            setError(oldErr => ({ ...oldErr, password: "Please enter a password" }))
         }
-        if (!user?.confirmPassword){
+        if (!user?.confirmPassword) {
             isError = true
-            setError( oldErr=>({ ...oldErr, confirmPassword: "Please confirm your password" }) )
+            setError(oldErr => ({ ...oldErr, confirmPassword: "Please confirm your password" }))
         }
-        if (user?.password && user?.confirmPassword && user?.password != user?.confirmPassword){
+        if (user?.password && user?.confirmPassword && user?.password != user?.confirmPassword) {
             isError = true
-            setError( oldErr=>({ ...oldErr, password: "Your password is not confirmed! Please try again" }) )
+            setError(oldErr => ({ ...oldErr, password: "Your password is not confirmed! Please try again" }))
         }
         return isError
     }
 
-    const createAUser = function(){
+    const createAUser = function () {
         // check if the fields are fillewd properly
+        if (inProgress) return
+        setInProgress(()=>(true))
         let isError = validateFields()
         if (isError) return
-        console.log('creating a user', user)
         user.name = user.name.trim()
         user.userName = user.userName.trim()
         user.email = user.email.trim()
 
-        api.post("/user", { userData: user }).then( ({data})=>{
-            console.log('user created', data)
-        } ).catch( err=>{ console.log(err) } )
+        api.post("/user", { userData: user }).then(({ data }) => {
+            if (data.success) {
+                router.dismissAll()
+                router.replace({ pathname: "", params: { userName: data.userName } })
+            } else {
+                if (data.code == '11000') {
+                    setError(oldErr => ({ ...oldErr, userName: 'This username is already taken!' }))
+                }
+            }
+            setInProgress(()=>(false))
+        }).catch(err => {
+            console.log(err)
+            setInProgress(()=>(false))
+        })
     }
 
-    
+
 
     return (
         <SafeAreaView style={styles.container} >
@@ -110,17 +105,17 @@ export default function () {
             <SafeAreaView>
                 <ScrollView style={styles.scrollArea}>
                     <Text style={styles.headerTitle}>Enter your details</Text>
-                    
+
                     <View style={styles.inputContainer}>
                         <Text>Name</Text>
                         <View style={styles.inputArea}>
                             <TextInput value={user.name} style={styles.input} placeholder="Enter your name"
-                            ref={refList[0]} onSubmitEditing={()=>handleFocus(0)}
-                            onChangeText={ (newText)=>{ modifyUser( oldUser=>({...oldUser, name:newText}) ) } }
+                                ref={refList.name} onSubmitEditing={() => handleFocus('name', 'userName')}
+                                onChangeText={(newText) => { modifyUser(oldUser => ({ ...oldUser, name: newText })) }}
                             />
                         </View>
-                        {error.name?
-                            <Text style={styles.inputErrorText}>{error.name}</Text>:
+                        {error.name ?
+                            <Text style={styles.inputErrorText}>{error.name}</Text> :
                             <></>
                         }
                     </View>
@@ -128,15 +123,15 @@ export default function () {
                         <Text>Username</Text>
                         <View style={styles.inputArea}>
                             <TextInput value={user.userName} style={styles.input} placeholder="Enter a unique user name"
-                            ref={refList[1]} onSubmitEditing={()=>handleFocus(1)}
-                            onChangeText={ (newText)=>{
-                                modifyUser( oldUser=>({...oldUser, userName:newText}) )
-                                debouncedCheckUserName(newText, user?._id)
-                            } }
+                                ref={refList.userName} onSubmitEditing={() => handleFocus('userName', 'email')}
+                                onChangeText={(newText) => {
+                                    modifyUser(oldUser => ({ ...oldUser, userName: newText }))
+                                    debouncedCheckUserName(newText, user?._id)
+                                }}
                             />
                         </View>
-                        {error.userName?
-                            <Text style={styles.inputErrorText}>{error.userName}</Text>:
+                        {error.userName ?
+                            <Text style={styles.inputErrorText}>{error.userName}</Text> :
                             <></>
                         }
                     </View>
@@ -144,12 +139,12 @@ export default function () {
                         <Text>Email</Text>
                         <View style={styles.inputArea}>
                             <TextInput value={user.email} style={styles.input} placeholder="Enter an email to register with"
-                            ref={refList[2]} onSubmitEditing={()=>handleFocus(2)} keyboardType="email-address"
-                            onChangeText={ (newText)=>{ modifyUser( oldUser=>({...oldUser, email:newText}) ) } }
+                                ref={refList.email} onSubmitEditing={() => handleFocus('email', 'password')} keyboardType="email-address"
+                                onChangeText={(newText) => { modifyUser(oldUser => ({ ...oldUser, email: newText })) }}
                             />
                         </View>
-                        {error.email?
-                            <Text style={styles.inputErrorText}>{error.email}</Text>:
+                        {error.email ?
+                            <Text style={styles.inputErrorText}>{error.email}</Text> :
                             <></>
                         }
                     </View>
@@ -157,18 +152,18 @@ export default function () {
                         <Text>Enter a password</Text>
                         <View style={styles.inputArea}>
                             <TextInput value={user.password} style={styles.input} placeholder="Enter a password"
-                            secureTextEntry={showPassword?false:true} ref={refList[3]} onSubmitEditing={()=>handleFocus(3)}
-                            onChangeText={ (newText)=>{ modifyUser( oldUser=>({...oldUser, password:newText}) ) } }
+                                secureTextEntry={showPassword ? false : true} ref={refList.password} onSubmitEditing={() => handleFocus('password', 'confirmPassword')}
+                                onChangeText={(newText) => { modifyUser(oldUser => ({ ...oldUser, password: newText })) }}
                             />
-                            <TouchableOpacity style={styles.passwordEye} onPress={()=> setShowPassword(!showPassword)}>
-                                { showPassword?
-                                    <Image style={styles.passwordEye} source={require("../../assets/images/eye.png")}/>:
-                                    <Image style={styles.passwordEye} source={require("../../assets/images/eye-closed.png")}/>
+                            <TouchableOpacity style={styles.passwordEye} onPress={() => setShowPassword(!showPassword)}>
+                                {showPassword ?
+                                    <Image style={styles.passwordEye} source={require("../../assets/images/eye.png")} /> :
+                                    <Image style={styles.passwordEye} source={require("../../assets/images/eye-closed.png")} />
                                 }
                             </TouchableOpacity>
                         </View>
-                        {error.password?
-                            <Text style={styles.inputErrorText}>{error.password}</Text>:
+                        {error.password ?
+                            <Text style={styles.inputErrorText}>{error.password}</Text> :
                             <></>
                         }
                     </View>
@@ -176,18 +171,22 @@ export default function () {
                         <Text>Confirm Password</Text>
                         <View style={styles.inputArea}>
                             <TextInput value={user.confirmPassword} style={styles.input} placeholder="Re-enter the same password"
-                            secureTextEntry={showConfirmPassword?false:true} ref={refList[4]} onSubmitEditing={()=>handleFocus(4)}
-                            onChangeText={ (newText)=>{ modifyUser( oldUser=>({...oldUser, confirmPassword:newText}) ) } }
+                                secureTextEntry={showConfirmPassword ? false : true} ref={refList.confirmPassword}
+                                onSubmitEditing={() => {
+                                    handleFocus('confirmPassword')
+                                    createAUser()
+                                }}
+                                onChangeText={(newText) => { modifyUser(oldUser => ({ ...oldUser, confirmPassword: newText })) }}
                             />
-                            <TouchableOpacity style={styles.passwordEye} onPress={()=> setShowConfirmPassword(!showConfirmPassword)}>
-                                { showConfirmPassword?
-                                    <Image style={styles.passwordEye} source={require("../../assets/images/eye.png")}/>:
-                                    <Image style={styles.passwordEye} source={require("../../assets/images/eye-closed.png")}/>
+                            <TouchableOpacity style={styles.passwordEye} onPress={() => setShowConfirmPassword(!showConfirmPassword)}>
+                                {showConfirmPassword ?
+                                    <Image style={styles.passwordEye} source={require("../../assets/images/eye.png")} /> :
+                                    <Image style={styles.passwordEye} source={require("../../assets/images/eye-closed.png")} />
                                 }
                             </TouchableOpacity>
                         </View>
-                        {error.confirmPassword?
-                            <Text style={styles.inputErrorText}>{error.confirmPassword}</Text>:
+                        {error.confirmPassword ?
+                            <Text style={styles.inputErrorText}>{error.confirmPassword}</Text> :
                             <></>
                         }
                     </View>
@@ -242,7 +241,7 @@ const lightStyle = StyleSheet.create({
         backgroundColor: '#fff',
         borderColor: '#ccc',
     },
-    passwordEye:{
+    passwordEye: {
         width: 20,
         height: 20,
         marginEnd: 10,

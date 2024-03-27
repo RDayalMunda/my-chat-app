@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Stack, useRouter } from "expo-router"
+import { Stack, useLocalSearchParams, useRouter } from "expo-router"
 
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Pressable, Image, useColorScheme } from 'react-native';
 import { androidRipple } from '../../common/styles';
@@ -9,7 +9,8 @@ import ErrorModal from '../modals/error-modal';
 
 export default ({ loginhandler }) => {
     let router = useRouter();
-    const [userName, setUsername] = useState('');
+    let params = useLocalSearchParams()
+    const [userName, setUsername] = useState(params?.userName?params.userName:'');
     const [password, setPassword] = useState('');
     const [errorModal, setErrorModal] = useState({ text: "No error yet", title: "Error", modalVisible: false })
     const closeModal = function(){
