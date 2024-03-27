@@ -11,4 +11,14 @@ export const Memoise = function(){
     return returnFunction
 }
 
+export const Debounce = function ( func, delay=1000 ){
+    let timeout = null
+    return function(...args){
+        clearTimeout(timeout)
+        timeout = setTimeout( (  )=>{
+            func(...args)
+        }, delay )
+    }
+}
+
 export const memoiseInstance = Memoise()

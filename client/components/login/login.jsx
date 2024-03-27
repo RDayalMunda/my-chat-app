@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Stack } from "expo-router"
+import { Stack, useRouter } from "expo-router"
 
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Pressable, Image, useColorScheme } from 'react-native';
 import { androidRipple } from '../../common/styles';
@@ -8,6 +8,7 @@ import { storeInLocal } from '../../common/localstorage';
 import ErrorModal from '../modals/error-modal';
 
 export default ({ loginhandler }) => {
+    let router = useRouter();
     const [userName, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorModal, setErrorModal] = useState({ text: "No error yet", title: "Error", modalVisible: false })
@@ -35,6 +36,13 @@ export default ({ loginhandler }) => {
             console.log(err)
         }
     };
+
+    const navigateTo = function(path, query){
+        router.push({
+            pathname: path,
+            params: query
+        })
+    }
 
 
     const handleForgotPassword = () => {
@@ -87,6 +95,12 @@ export default ({ loginhandler }) => {
                 <View style={{ overflow: 'hidden' }}>
                     <Pressable onPress={handleForgotPassword} android_ripple={androidRipple.dark}>
                         <Text style={styles.forgotPassword}>Forgot your password?</Text>
+                    </Pressable>
+                </View>
+                
+                <View>
+                    <Pressable onPress={()=>{ navigateTo("/user") }} android_ripple={androidRipple.dark}>
+                        <Text style={styles.forgotPassword}>Don't have an account? Create One!</Text>
                     </Pressable>
                 </View>
             </View>

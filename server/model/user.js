@@ -1,9 +1,8 @@
 const mongoose = require("mongoose")
-const ObjectId = mongoose.Types.ObjectId
 const collectionSchema = mongoose.Schema([
     {
         name: String,
-        userName: String,
+        userName: { type: String, index: { unique: true, sparse: true } },
         password: String,
         imageUrl: String,
     }
