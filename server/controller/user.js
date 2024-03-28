@@ -1,8 +1,10 @@
 const bcrypt = require("bcrypt")
+const path = require("path")
 
-const { SALT_ROUNDS } = require("../config")
+const { SALT_ROUNDS, IMAGE_UPLOAD_DIR } = require("../config")
 const userDao= require("../dao/user")
 const { STATUS_CODE } = require("../helper/constants")
+const { deleteFile } = require("../helper/utils")
 
 module.exports.createUser = async function(req, res){
     try{
@@ -36,8 +38,10 @@ module.exports.uploadProfileImage = async function(req, res){
         if (!req.file) {
             return res.status(400).send('No file uploaded.');
         }
+        let oldImagePath = path.join( IMAGE_UPLOAD_DIR, req.body.oldImageUrl )
         await userDao.updateUser( { _id: req.body.userId }, { imageUrl: req.file.filename } )
         res.status(STATUS_CODE.OK).json({ success: true, imageUrl: req.file.filename })
+        deleteFile( oldImagePath )
     }catch(err){
         console.log(err)
         res.status( STATUS_CODE.OK ).json({ success: false })

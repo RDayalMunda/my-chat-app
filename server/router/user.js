@@ -12,7 +12,6 @@ const storage = multer.diskStorage({
     destination: IMAGE_UPLOAD_DIR,
     filename: (req, file, cb)=>{
         const ext = path.extname(file.originalname);
-
         const uniqueFilename = `${Date.now()}${unique++}${ext}`;
         cb(null, uniqueFilename)
     }

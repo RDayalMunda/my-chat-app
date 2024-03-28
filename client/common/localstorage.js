@@ -15,7 +15,7 @@ export const updateInLocal = async function (key, data) {
     try {
 
         let orgData = await getFromLocal(key)
-        if (typeof data == Object && data != null) {
+        if (typeof data == 'object' && data != null) {
             orgData = { ...orgData, ...data }
         } else orgData = data
 

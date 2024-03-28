@@ -17,7 +17,7 @@ export default function ({ loginhandler }) {
     var [modalData, setModalData] = useState({ title: "", imageUrl: "", modalVisible: false })
     let colourScheme = useColorScheme()
 
-    const [imageEditVisible, setImageEditVisible] = useState(true);
+    const [imageEditVisible, setImageEditVisible] = useState(false);
 
     let styles = colourScheme == 'dark' ? darkStyle : lightStyle
 
@@ -59,6 +59,7 @@ export default function ({ loginhandler }) {
                 name: res[0].name,
             })
             formData.append('userId', userData._id)
+            formData.append('oldImageUrl', userData.imageUrl)
             const { data } = await api.post("/user/profile-image", formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -66,6 +67,7 @@ export default function ({ loginhandler }) {
             })
             await updateInLocal( 'user-data', { imageUrl: data.imageUrl } )
             setUserData( oldData=>({ ...oldData, imageUrl: data.imageUrl }) )
+            setImageEditVisible( ()=>(false) )
 
         } catch (err) {
             console.log(err)
