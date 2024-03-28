@@ -2,7 +2,6 @@ const fs = require("fs")
 
 
 module.exports.deleteFile = async function (filepath){
-    console.log('to dewleter', filepath)
     try{
         fs.unlink( filepath, (err, data)=>{
             if (err){
