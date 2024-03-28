@@ -14,3 +14,11 @@ module.exports.createUser = async function(userData){
     await user.save()
     return user
 }
+
+module.exports.updateUser = async function(query, setData ){
+    return await model.User.updateOne( query, { $set: setData } )
+}
+
+module.exports.updateAndFetchUser = async function(query, setData){
+    return await model.User.findOneAndUpdate( query, { $set: setData }, { new: true } )
+}

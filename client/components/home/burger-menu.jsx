@@ -1,10 +1,12 @@
 import { Stack } from "expo-router";
 import { useEffect, useState } from "react";
-import { Modal, Pressable, StyleSheet, Text, View, Animated, Button, Image, ScrollView, useColorScheme, SafeAreaView } from "react-native";
+import { Modal, Pressable, StyleSheet, Text, View, Animated, Button, Image, ScrollView, useColorScheme, SafeAreaView, Platform } from "react-native";
+import DocumentPicker from 'react-native-document-picker'
+
 import { androidRipple } from "../../common/styles";
 import { logout } from "../../common/auth";
-import { getUserData } from "../../common/localstorage";
-import { IMAGE_URL } from "../../common/api";
+import { getUserData, updateInLocal } from "../../common/localstorage";
+import api, { IMAGE_URL } from "../../common/api";
 import ImageModal from "../modals/image-modal";
 import { memoiseInstance } from "../../common/utils";
 
@@ -15,11 +17,9 @@ export default function ({ loginhandler }) {
     var [modalData, setModalData] = useState({ title: "", imageUrl: "", modalVisible: false })
     let colourScheme = useColorScheme()
 
-    const [imageEditVisible, setImageEditVisible] = useState(false);
+    const [imageEditVisible, setImageEditVisible] = useState(true);
 
     let styles = colourScheme == 'dark' ? darkStyle : lightStyle
-
-
 
     const animateModal = (toValue, toClose) => {
 
@@ -45,8 +45,34 @@ export default function ({ loginhandler }) {
         setModalData(oldData => ({ ...modalData, modalVisible: false }))
     }
 
-    useEffect(() => {
+    async function selectImage() {
+        try {
+            const res = await DocumentPicker.pick({
+                presentationStyle: 'fullScreen',
+                type: DocumentPicker.types.images,
+            });
+            if (!res.length) return
+            const formData = new FormData();
+            formData.append('file', {
+                uri: Platform.OS == 'android' ? res[0].uri : res[0].uri.replace('file://', ''),
+                type: res[0].type,
+                name: res[0].name,
+            })
+            formData.append('userId', userData._id)
+            const { data } = await api.post("/user/profile-image", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            await updateInLocal( 'user-data', { imageUrl: data.imageUrl } )
+            setUserData( oldData=>({ ...oldData, imageUrl: data.imageUrl }) )
 
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+    useEffect(() => {
 
         if (visible) {
             animateModal(0)
@@ -151,18 +177,20 @@ export default function ({ loginhandler }) {
 
                     <SafeAreaView style={styles.moreOptionContent}>
                         <ScrollView>
-                            
+
                             <Pressable style={[styles.option, styles.optionHandle]}></Pressable>
-                            <Pressable style={styles.option} android_ripple={androidRipple.light}>
-                                <Image style={styles.imageBtn} source={require("../../assets/images/trash.png")}/>
-                                <Text style={styles.textCenter}>Remove Image</Text>
+                            <Pressable style={styles.option} android_ripple={androidRipple.light}
+                                onPress={selectImage}
+                            >
+                                <Image style={styles.imageBtn} source={require("../../assets/images/upload.png")} />
+                                <Text style={styles.textCenter}>Upload Image</Text>
                             </Pressable>
                             <Pressable
                                 style={[styles.option, { backgroundColor: '#f00' }]} android_ripple={androidRipple.light}
-                                onPress={()=>{ setImageEditVisible(()=>(false)) }}
+                                onPress={() => { setImageEditVisible(() => (false)) }}
                             >
-                                <Image style={styles.imageBtn} source={require("../../assets/images/close.png")}/>
-                                <Text style={styles.textCenter}>Cancel</Text>
+                                <Image style={styles.imageBtn} source={require("../../assets/images/close.png")} />
+                                <Text style={styles.textCenter}>Close</Text>
                             </Pressable>
                         </ScrollView>
 

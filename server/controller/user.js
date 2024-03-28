@@ -30,3 +30,16 @@ module.exports.checkUniqueUserName = async function(req, res){
         res.status( STATUS_CODE.ERROR ).json({})
     }
 }
+
+module.exports.uploadProfileImage = async function(req, res){
+    try{
+        if (!req.file) {
+            return res.status(400).send('No file uploaded.');
+        }
+        await userDao.updateUser( { _id: req.body.userId }, { imageUrl: req.file.filename } )
+        res.status(STATUS_CODE.OK).json({ success: true, imageUrl: req.file.filename })
+    }catch(err){
+        console.log(err)
+        res.status( STATUS_CODE.OK ).json({ success: false })
+    }
+}
