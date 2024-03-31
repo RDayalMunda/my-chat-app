@@ -74,14 +74,16 @@ This will create a folder named "android" inside your client directory.( This ma
 ## Setting Up Server
 In the server folder create a `config.js` file.
 ```javascript
+const path = require("path")
 module.exports.PORT = 3000;
 module.exports.CLIENT_PORT = 3081;
-module.exports.LOCALHOST = "http://192.168.123.456"
-module.exports.SOCKET_URL = "http://192.168.123.456:3081";
+module.exports.LOCALHOST = "http://192.168.82.212";
+module.exports.SOCKET_URL = "http://127.0.0.1:4000";
 module.exports.MDB = {
-    URL: "mongodb://127.0.0.1:27017/mychatapp"
+  URL: "mongodb://127.0.0.1:27017/mychatapp"
 }
-module.exports.SALT_ROUNDS = 10
+module.exports.IMAGE_UPLOAD_DIR = path.join( __dirname, '..', 'images', '/' )
+module.exports.SALT_ROUNDS = 10;
 ```
 Open a terminal. Install packges and start the server
 ```bash
@@ -216,3 +218,78 @@ After this you can build your app again.
 
 ## Want to change your app's name?
 To change you app name, the name that is displayed on the app drawer. You have to edit this file, `\android\app\src\main\res\values\strings.xml`.
+
+
+## Help with setting up nginx
+
+Here is the configuration of my project
+```bash
+
+server {
+  listen 80;
+  listen [::]:80;
+
+  root /var/www/sub.test;
+  index index.html;
+
+  server_name rnchat.lovetocode.in;
+
+  client_max_body_size 20M;
+
+  location / {
+    try_files $uri $uri/ /index.html;
+  }
+
+  location /images/ {
+    root /var/www/my-chat-app/;
+    index default.png;
+    try_files $uri $uri/;
+  }
+
+  location /api/ {
+    add_header Access-Control-Allow-Origin *;
+    add_header Cache-Control: no-cache;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forward-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forward-Proto $scheme;
+    proxy_set_header X-Forward-Host $host;
+    proxy_set_header X-Forward-Server $host;
+    proxy_connect_timeout 300;
+    proxy_send_timeout 300;
+    proxy_read_timeout 300;
+    send_timeout 300;
+    proxy_cookie_path ~*^/.* /;
+    proxy_pass http://127.0.0.1:3000/;
+  }
+
+  location /socket.io/ {
+    proxy_pass http://127.0.0.1:4000;
+    proxy_redirect off;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection "upgrade";
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+  }
+
+}
+
+
+server {
+  listen 80 default_server;
+  listen [::]:80 default_server;
+
+  root /var/www/test;
+
+  index index.html index.htm index.nginx-debian.html;
+
+  server_name lovetocode.in;
+
+  location / {
+    try_files $uri $uri/ index.html;
+  }
+
+}
+```
