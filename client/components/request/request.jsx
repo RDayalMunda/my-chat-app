@@ -1,24 +1,49 @@
 import { Stack, useRouter } from "expo-router";
-import { useState } from "react";
-import { Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, Image, View, useColorScheme, Pressable } from "react-native"
+import { useEffect, useState } from "react";
+import { Dimensions, SafeAreaView, ScrollView, StyleSheet, Text, Image, View, useColorScheme, Pressable } from "react-native"
 import api from "../../common/api";
 import { androidRipple } from "../../common/styles";
 import AddUserModal from "../modals/add-user-modal";
+import { getSession } from "../../common/auth";
+import { getUserData } from "../../common/localstorage";
 
 
 export default function Requests() {
     const router = useRouter()
     // const [inProgress, setInProgress] = useState(false)
     const styles = (useColorScheme() == 'dark') ? darkStyle : lightStyle;
+    const [requests, setRequests] = useState([])
 
 
     const [showAddUser, setShowAddUser] = useState(false)
+
+
+    useEffect(() => {
+
+        getUserData().then(async (data) => {
+
+            api.get("/request/all", {
+                headers: {
+                    sessionToken: await getSession(),
+                    userId: data._id
+                }
+            }).then(({ data }) => {
+
+                console.log('success', data.requests)
+                setRequests(() => (data.requests))
+
+            }).catch(err => { console.log(err) })
+
+        }).catch(err => { console.log(err) });
+
+
+    }, [])
 
     return (
         <SafeAreaView style={styles.container} >
             <Stack.Screen
                 options={{
-                    title: "Friend request",
+                    title: "Friend requests",
                     statusBarColor: styles.statusbar.color,
                     headerStyle: styles.headerStyle,
                     headerTitleStyle: styles.text,
@@ -26,7 +51,7 @@ export default function Requests() {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Pressable
                                 android_ripple={androidRipple.light}
-                                onPress={() => { setShowAddUser(()=>(true)) }}
+                                onPress={() => { setShowAddUser(() => (true)) }}
                                 style={styles.iconBtn}
                             >
                                 <Image
@@ -40,11 +65,26 @@ export default function Requests() {
             />
             <SafeAreaView>
                 <ScrollView style={styles.scrollArea}>
-                    <Text style={styles.headerTitle}>Enter your details</Text>
+                    {
+                        requests.map(request => (
+
+                            <View key={request._id} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Text style={[styles.headerTitle, { width: '80%' }]}>Your frinds has requested this line of code from you</Text>
+                                <View style={{ flexDirection: 'row', width: '20%'}}>
+                                    <Pressable android_ripple={androidRipple.dark} style={styles.iconBtn}>
+                                        <Image source={require("../../assets/images/checked.png")} style={styles.icon} />
+                                    </Pressable>
+                                    <Pressable android_ripple={androidRipple.dark} style={styles.iconBtn}>
+                                        <Image source={require("../../assets/images/rejected.png")} style={styles.icon} />
+                                    </Pressable>
+                                </View>
+                            </View>
+                        ))
+                    }
                 </ScrollView>
             </SafeAreaView>
 
-            <AddUserModal modalVisible={showAddUser} closeModal={()=>{ setShowAddUser(()=>(false)) }}/>
+            <AddUserModal modalVisible={showAddUser} closeModal={() => { setShowAddUser(() => (false)) }} />
 
         </SafeAreaView>
     )
