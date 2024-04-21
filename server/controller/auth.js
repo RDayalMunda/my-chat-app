@@ -4,7 +4,6 @@ const { STATUS_CODE } = require("../helper/constants")
 const bCrypt = require("bcrypt") 
 
 module.exports.login = async function(req, res){
-    console.log('reached to login')
     try{
         let responseObj = {}
         if ( !req.body.userName || !req.body.password ){

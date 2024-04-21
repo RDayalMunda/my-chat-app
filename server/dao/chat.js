@@ -19,10 +19,11 @@ module.exports.getMessageByGroupId = async function (groupId) {
                 as: "userData",
             }
         },
+        { $unwind: "userData" },
         {
             $project: {
                 _id: true, text: true, userId: true, groupId: true, createdAt: true,
-                userName: { $arrayElemAt: ["$userData.name", 0] },
+                userName: "$userData.name",
             }
         },
     ])

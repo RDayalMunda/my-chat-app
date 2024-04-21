@@ -159,7 +159,11 @@ export default function () {
                 >
                     {messageList.map((item) => (
                         <View key={item._id} style={[styles.messageContainer, (item.userId == userData._id) ? styles.messageContainerSender : styles.messageContainerReceiver]}>
-                            {(item.userId != userData._id) ? (<View style={[styles.messageTail, styles.receiverTail]} />) : <></>}
+                            {
+                                (item.userId != userData._id) ? (
+                                <View style={[styles.messageTail, styles.receiverTail]} />
+                                ) : <></>
+                            }
                             <View style={[styles.messageContent, (item.userId == userData._id) ? styles.senderMessage : styles.receiverMessage]}>
                                 {!groupData?.isDirect ? (
                                     <Text style={styles.messageTitle}>{item.userName}</Text>

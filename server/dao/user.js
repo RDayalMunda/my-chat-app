@@ -1,6 +1,10 @@
 const model = require("../model/index.js");
 
 
+module.exports.getUserByOid = async function (_id){
+    return await model.User.findOne({ _id  })
+}
+
 module.exports.getUserByUsername = async function (userName) {
     return await model.User.findOne({ userName: userName })
 }
