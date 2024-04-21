@@ -21,12 +21,23 @@ export default ({ loginhandler }) => {
     const handleSignIn = async () => {
         // Implement sign-in logic here
         try {
+
+            if (!userName || !password) return
+
             let payload = { userName, password }
+            console.log('send to login')
             let { data } = await api.post("auth/login", payload)
             if (data.success) {
                 storeInLocal('sessionToken', data.session)
                 storeInLocal('user-data', data.session)
                 loginhandler(JSON.stringify(data.session))
+            }else{
+                console.log('some error', data)
+                setErrorModal( oldData=>({
+                    ...oldData,
+                    text: data.message,
+                    modalVisible: true
+                }) )
             }
         } catch (err) {
             setErrorModal( oldData=>({

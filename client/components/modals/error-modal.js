@@ -4,7 +4,7 @@ export default function ({ title, text, modalVisible, closeModal }) {
     return (
 
         <Modal
-            animationType="slide"
+            animationType="fade"
             transparent={true}
             visible={modalVisible}
             onRequestClose={closeModal}
@@ -16,16 +16,16 @@ export default function ({ title, text, modalVisible, closeModal }) {
                     <View style={styles.header}>
                         <Text style={styles.title}>{title}</Text>
                         <TouchableOpacity onPress={closeModal} style={styles.btn}>
-                            <Image source={require("../../assets/images/reload.png")} style={styles.imageBtn} />
+                            <Image source={require("../../assets/images/close.png")} style={styles.imageBtn} />
                         </TouchableOpacity>
                     </View>
 
                     <ScrollView contentContainerStyle={styles.contentContainer}>
-                        <Text>{text}</Text>
+                        <Text>{text} </Text>
                     </ScrollView>
 
                     <View style={styles.footer}>
-                        <TouchableOpacity onPress={closeModal}>
+                        <TouchableOpacity onPress={closeModal} style={styles.btn}>
                             <Text style={styles.closeButton}>Close</Text>
                         </TouchableOpacity>
                     </View>
@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
     modalContent: {
         backgroundColor: '#fff',
         width: '80%',
-        height: '80%',
+        minHeight: 10,
+        maxHeight: '80%',
         borderRadius: 10,
         padding: 20,
     },
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     closeButton: {
-        color: 'blue',
+        paddingHorizontal: 10,
     },
     content: {
         flex: 1,

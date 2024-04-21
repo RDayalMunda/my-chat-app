@@ -318,6 +318,7 @@ const lightStyle = StyleSheet.create({
         borderRadius: 25,
         resizeMode: 'cover', // Adjust the image resizing mode as needed
         borderColor: '#11111178',
+        backgroundColor: '#888',
         borderWidth: 1,
     },
     iconBtn: {
