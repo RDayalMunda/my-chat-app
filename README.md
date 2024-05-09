@@ -77,7 +77,7 @@ In the server folder create a `config.js` file.
 const path = require("path")
 module.exports.PORT = 3000;
 module.exports.CLIENT_PORT = 3081;
-module.exports.LOCALHOST = "http://192.168.169.212";
+module.exports.LOCALHOST = "http://192.168.86.212";
 module.exports.SOCKET_URL = "http://127.0.0.1:4000";
 module.exports.MDB = {
   URL: "mongodb://127.0.0.1:27017/mychatapp"
@@ -182,7 +182,7 @@ java -jar bundletool-all-1.15.6.jar extract-apks --apks=E:/projects/react-native
 
 ## Other knows challenges I faced
 ### I cannot make any request to different servers
-I was not able to make hit to my other server on my local machine i.e. `http://192.168.169.212:3081`. So I tried a secured website like `https://images.freeimages.com/images/large-previews/53d/leather-link-texture-1538412.jpg`. This also did not go well.
+I was not able to make hit to my other server on my local machine i.e. `http://192.168.86.212:3081`. So I tried a secured website like `https://images.freeimages.com/images/large-previews/53d/leather-link-texture-1538412.jpg`. This also did not go well.
 
 To fix this we need to create a file name `network_security_config.xml` at `\android\app\src\main\res\xml\network_security_config.xml`. If it is already present then just edit the file.
 ```xml
@@ -293,3 +293,24 @@ server {
 
 }
 ```
+
+
+## Wondering how to setup Puch notification for android?
+There are many other ways you can add push notification feature to your application. But If you want to do what I did then follow these steps.
+You can follow this websites for referenses
+https://blog.logrocket.com/react-native-push-notifications-complete-guide/
+https://blog.logrocket.com/react-native-push-notifications-firebase-cloud-messaging/
+
+- Create a firebase project for your project. You can go to [Their Website](https://console.firebase.google.com/)
+  Create a project. They will ask you for a name, so enter something. You can enable or disable google analytics. In my case I am not using it.
+  It will take some time to setup your project. Then you can hit "Continue" to move to your project's dash board
+- Get started with adding Firebase to your application
+  com.rdayalmunda.mychatapp
+  Click on the android icon. You will be asked for Android package name.
+  You can find this i you "android/app/src/AndroidManifest.xml" file. Look for something like "com.xxxxx.xxxx"
+  Then click on register.
+  It might take some time
+- You will then have to download the config file provided after this step and add it to you project
+    - Where should you place this "google-service.json" you ask? Put it inside the app directory of your project.
+    - So if your project's name is "client", then the file's path would be "*/client/appp/google-service.json".
+    - After doing this click on Next.

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "770155487077",
+    "project_id": "redvalky-rn-cp",
+    "storage_bucket": "redvalky-rn-cp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:770155487077:android:9c6a7195f30a500bb58b8c",
+        "android_client_info": {
+          "package_name": "com.rdayalmunda.mychatapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4Sf3lm7kMNyT4bj2FEnHMnpAt1HD4JzE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
